@@ -14,20 +14,20 @@ class RegnalYear < TimelineElement
   key :abbreviation, String
 end
 
-class GeneralElection < TimeElement
+class GeneralElection < TimelineElement
 end
 
-class ByElection < TimeElement
+class ByElection < TimelineElement
   key :reason, String
 end
 
-class Parliament < TimeElement
+class Parliament < TimelineElement
   has_many :parly_sessions
 
   key :number, Integer  
 end
 
-class ParlySession < TimeElement
+class ParlySession < TimelineElement
   belongs_to :parliament
   
   key :reference, String
