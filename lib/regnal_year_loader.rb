@@ -24,6 +24,7 @@ class RegnalYearLoader
       regnal.abbreviation = record["abbreviation"]
       regnal.monarch = record["monarch"]
       regnal.year_of_reign = record["year"].to_i
+      regnal.id = "#{regnal.start_date.to_s}_RegnalYear"
       regnal.save
     end
   end
