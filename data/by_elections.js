@@ -1034,7 +1034,7 @@
     {
         "start_date": "2002-02-14",
         "end_date": "2002-02-14",
-        "constituency": "Ogmore"
+        "constituency": "Ogmore",
         "reason": "death of sitting MP"
     },
     {
