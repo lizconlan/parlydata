@@ -95,4 +95,24 @@ class ConstituencyTest < MiniTest::Unit::TestCase
     
     assert_equal [@result], Constituency.find_constituency(name, 1970)
   end
+  
+  def test_name_south_vs_south_name
+    name = "South East Staffordshire"
+    
+    Constituency.expects(:find_exact_matches_by_year).with(name, 1970).returns([])
+    Constituency.expects(:find_fuzzy_matches_by_year).with(name, 1970).returns([])
+    Constituency.expects(:find_exact_matches_by_year).with("Staffordshire South East", 1970).returns([@result])
+    
+    assert_equal [@result], Constituency.find_constituency(name, 1970)
+  end
+  
+  def test_south_name_vs_name_south
+    name = "Antrim South"
+    
+    Constituency.expects(:find_exact_matches_by_year).with(name, 1970).returns([])
+    Constituency.expects(:find_fuzzy_matches_by_year).with(name, 1970).returns([])
+    Constituency.expects(:find_exact_matches_by_year).with("South Antrim", 1970).returns([@result])
+    
+    assert_equal [@result], Constituency.find_constituency(name, 1970)
+  end
 end
