@@ -2,10 +2,12 @@ require 'mongo_mapper'
 
 class Constituency
   include MongoMapper::Document
+  many :elections, :in => :election_ids
   
   key :name, String
   key :year_created, Integer
   key :year_abolished, Integer
+  key :election_ids, Array
   
   def self.find_exact_matches_by_year(name ,year)
     c = Constituency.where(:name => name, :year_created.lte => year, :year_abolished.gte => year)
@@ -25,13 +27,15 @@ class Constituency
     name = name.gsub(":","") if name.include?(":")
     list = find_exact_or_fuzzy_match(name, year)
     list = find_exact_or_fuzzy_match(name.gsub(" upon ", "-upon-"), year) if list.empty? and name.include?(" upon ")
-    list = find_exact_or_fuzzy_match(name.gsub("-upon-", " upon "), year) if list.empty? and name.include?("-upon-")
+    list = find_exact_or_fuzzy_match(name.gsub("-upon-", " upon "), year) if list.empty? and name.include?("-upon-")    
+    list = find_exact_or_fuzzy_match(name.gsub(" under ", "-under-"), year) if list.empty? and name.include?(" under ")
+    list = find_exact_or_fuzzy_match(name.gsub("-under-", " under "), year) if list.empty? and name.include?("-under-")    
     list = find_exact_or_fuzzy_match(name.gsub(" le ", "-le-"), year) if list.empty? and name.include?(" le ")
     list = find_exact_or_fuzzy_match(name.gsub("-le-", " le "), year) if list.empty? and name.include?("-le-")
     list = find_exact_or_fuzzy_match(name.gsub(" & ", " and "), year) if list.empty? and name.include?("&")
     list = find_exact_or_fuzzy_match(name.gsub(" and ", " & "), year) if list.empty? and name.include?(" and ")
     list = find_exact_or_fuzzy_match(name.gsub(",", ""), year) if list.empty? and name.include?(",")
-    if list.empty? and name =~ /(^South |^East |^North |^West )(.*)/
+    if list.empty? and name =~ /(^South |^East |^North |^West |^Mid )(.*)/
       heading = $1
       the_rest = $2
       if the_rest =~ /(^South |^East |^North |^West )(.*)/

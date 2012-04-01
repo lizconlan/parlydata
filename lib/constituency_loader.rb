@@ -12,11 +12,12 @@ class ConstituencyLoader
     data.each do |record|
       constituency = Constituency.new
       constituency.name = record["name"]
+      constituency.name = "Richmond (Yorks)" if constituency.name == "Richmond" and record["link"] =~ /yorkshire/
       constituency.year_created = record["created"]
       if record["abolished"]
         constituency.year_abolished = record["abolished"]
       end
-      constituency.id = "#{constituency.name.downcase().gsub(" ","-")}_#{constituency.year_created}"
+      constituency.id = "#{constituency.name.downcase().gsub(" ","-").gsub('(',"").gsub(')',"")}_#{constituency.year_created}"
       constituency.save
     end
   end

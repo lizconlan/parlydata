@@ -440,7 +440,7 @@
     {
         "start_date": "1982-06-03",
         "end_date": "1982-06-03",
-        "constituency": "Merton: Mitcham and Morden",
+        "constituency": "Merton Mitcham and Morden",
         "reason": "resignation of sitting MP"
     },
     {
@@ -458,13 +458,13 @@
     {
         "start_date": "1982-10-28",
         "end_date": "1982-10-28",
-        "constituency": "Southwark: Peckham",
+        "constituency": "Southwark Peckham",
         "reason": "death of sitting MP"
     },
     {
         "start_date": "1982-10-28",
         "end_date": "1982-10-28",
-        "constituency": "Birmingham: Northfield",
+        "constituency": "Birmingham Northfield",
         "reason": "death of sitting MP"
     },
     {
@@ -488,7 +488,7 @@
     {
         "start_date": "1983-07-28",
         "end_date": "1983-07-28",
-        "constituency": "Penrith & the Border",
+        "constituency": "Penrith and The Border",
         "reason": "sitting MP elevated to peerage"
     },
     {
@@ -524,7 +524,7 @@
     {
         "start_date": "1984-12-13",
         "end_date": "1984-12-13",
-        "constituency": "Enfield, Southgate",
+        "constituency": "Enfield Southgate",
         "reason": "death of sitting MP"
     },
     {
@@ -680,7 +680,7 @@
     {
         "start_date": "1988-07-14",
         "end_date": "1988-07-14",
-        "constituency": "Glasgow, Govan",
+        "constituency": "Glasgow Govan",
         "reason": "resignation of sitting MP"
     },
     {
@@ -794,7 +794,7 @@
     {
         "start_date": "1991-07-04",
         "end_date": "1991-07-04",
-        "constituency": "Liverpool, Walton",
+        "constituency": "Liverpool Walton",
         "reason": "death of sitting MP"
     },
     {
@@ -1070,7 +1070,7 @@
     {
         "start_date": "2005-09-29",
         "end_date": "2005-09-29",
-        "constituency": "Livingstone",
+        "constituency": "Livingston",
         "reason": "death of sitting MP"
     },
     {
