@@ -20,3 +20,11 @@ task :load_all do
   ryl = RegnalYearLoader.new
   ryl.load_from_scraperwiki()
 end
+
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.libs.push "lib"
+  t.test_files = FileList['test/*_test.rb']
+  t.verbose = true
+end

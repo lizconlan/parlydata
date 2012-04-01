@@ -1,6 +1,7 @@
 require 'rest-client'
 require 'json'
 require 'date'
+
 require_relative '../models/constituency.rb'
 
 class ConstituencyLoader
