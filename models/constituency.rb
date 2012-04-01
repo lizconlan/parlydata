@@ -30,6 +30,7 @@ class Constituency
     list = find_exact_or_fuzzy_match(name.gsub("-le-", " le "), year) if list.empty? and name.include?("-le-")
     list = find_exact_or_fuzzy_match(name.gsub(" & ", " and "), year) if list.empty? and name.include?("&")
     list = find_exact_or_fuzzy_match(name.gsub(" and ", " & "), year) if list.empty? and name.include?(" and ")
+    list = find_exact_or_fuzzy_match(name.gsub(",", ""), year) if list.empty? and name.include?(",")
     if list.empty? and name =~ /(^South |^East |^North |^West )(.*)/
       heading = $1
       the_rest = $2

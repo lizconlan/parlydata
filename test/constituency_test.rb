@@ -66,6 +66,16 @@ class ConstituencyTest < MiniTest::Unit::TestCase
     assert_equal [@result], Constituency.find_constituency(name, 1970)
   end
   
+  def test_comma_edge_case
+    name = "Glasgow, Anniesland"
+    
+    Constituency.expects(:find_exact_matches_by_year).with(name, 2000).returns([])
+    Constituency.expects(:find_fuzzy_matches_by_year).with(name, 2000).returns([])
+    Constituency.expects(:find_exact_matches_by_year).with("Glasgow Anniesland", 2000).returns([@result])
+    
+    assert_equal [@result], Constituency.find_constituency(name, 2000)
+  end
+  
   def test_ampersand_edge_case_1
     name = "Penrith & The Border"
     
