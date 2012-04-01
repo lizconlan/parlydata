@@ -25,13 +25,17 @@ class GeneralElection < Election
 end
 
 class ByElection < Election
+  has_one :constituency
+  
+  key :constituency_id, BSON::ObjectId
   key :reason, String
 end
 
 class Parliament < TimelineElement
   has_many :parliamentary_sessions
 
-  key :number, Integer  
+  key :number, Integer
+  key :notes, String
 end
 
 class ParliamentarySession < TimelineElement
