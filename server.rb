@@ -9,6 +9,14 @@ MongoMapper.connect(env)
 require_relative "models/constituency"
 require_relative "models/timeline_element"
 
+before do
+  if request.port != 80
+    @base_path = "http://#{request.host}:#{request.port}/api"
+  else
+    @base_path = "http://#{request.host}/api"
+  end
+end
+
 get "/" do
   "yo"
 end
@@ -78,11 +86,11 @@ get "/api/constituency.json" do
       "Pet":{"properties":{"tags":{"type":"array","items":{"$ref":"tag"}},"id":{"type":"long"},"category":{"type":"category"},"status":{"type":"string","description":"pet status in the store","allowableValues":{"values":["available","pending","sold"],"valueType":"LIST"}},"name":{"type":"string"},"photoUrls":{"type":"array","items":{"type":"string"}}},"id":"pet"},
       "Tag":{"properties":{"id":{"type":"long"},"name":{"type":"string"}},"id":"tag"}
     },
-    "basePath":"http://localhost:4567/api",
+    "basePath":"#{@base_path}",
     "swaggerVersion":"1.1-SHAPSHOT.121026",
     "apiVersion":"1"}|
 end
 
 get "/api/resources.json" do
-  %|{"apis":[{"path":"/constituency.{format}","description":"Operations about constituency"}],"basePath":"http://localhost:4567/api","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
+  %|{"apis":[{"path":"/constituency.{format}","description":"Operations about constituency"}],"basePath":"#{@base_path}","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
 end

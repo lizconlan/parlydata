@@ -1,6 +1,12 @@
 jQuery(function($) {
+    port = window.document.location.port;
+    if (port && port != "80") {
+       port = ":" + port
+    } else {
+        port = ""
+    }
 
-   this.baseUrl = "http://localhost:4567/api";
+   this.baseUrl = window.document.location.hostname + port + "/api";
   //  this.apiKey = "my-api-key";
   
   var ApiSelectionController = Spine.Controller.create({
