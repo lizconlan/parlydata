@@ -18,10 +18,12 @@ before do
 end
 
 get "/" do
-  "yo"
+  #welcome/intro/human-friendly explanatory page
+  "intro text here"
 end
 
 get "/api/?" do
+  #api documentation page
   File.read(File.join('public/api', 'index.html'))
 end
 
@@ -37,6 +39,7 @@ get "/api/constituency/detail.json?" do
 end
 
 get "/api/constituency.json" do
+  #json file for Swagger
   %|{"apis":[
       {
         "path":"/constituency/detail.json",
@@ -92,5 +95,6 @@ get "/api/constituency.json" do
 end
 
 get "/api/resources.json" do
+  #resources.json for Swagger
   %|{"apis":[{"path":"/constituency.{format}","description":"Operations about constituency"}],"basePath":"#{@base_path}","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
 end
