@@ -28,14 +28,20 @@ get "/api/?" do
 end
 
 get "/api/constituency/detail.json?" do
+  content_type :json
   name = params[:name]
   year = params[:year]
   if name and year
     constituencies = Constituency.find_constituency(name, year.to_i)
   elsif name
-    constituencies = Constituency.find_all_by_name(/#{params[:name]}/i)
+    constituencies = Constituency.find_all_by_name(/#{name}/i)
   end
-  constituencies.to_json
+  unless constituencies.empty?
+    constituencies.to_json
+  else
+    status 404
+    %Q|{"message": "Constituency not found", "type": "error"}|
+  end
 end
 
 get "/api/constituency.json" do
@@ -67,7 +73,7 @@ get "/api/constituency.json" do
             "httpMethod":"GET",
             "notes":"Returns some stuff",
             "responseTypeInternal":"com.parlydata.api.model.Constituency",
-            "errorResponses":[{"reason":"Invalid ID supplied","code":400},{"reason":"Pet not found","code":404}],
+            "errorResponses":[{"reason":"Invalid ID supplied","code":400},{"reason":"Constituency not found","code":404}],
             "nickname":"getDetail",
             "responseClass":"constituency",
             "summary":"Get constituency detail"
