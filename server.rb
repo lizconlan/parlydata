@@ -71,9 +71,9 @@ get "/api/constituency.json" do
               }
             ],
             "httpMethod":"GET",
-            "notes":"Returns some stuff",
+            "notes":"Returns detailed information about a given constituency",
             "responseTypeInternal":"com.parlydata.api.model.Constituency",
-            "errorResponses":[{"reason":"Invalid ID supplied","code":400},{"reason":"Constituency not found","code":404}],
+            "errorResponses":[{"reason":"Constituency not found","code":404}],
             "nickname":"getDetail",
             "responseClass":"constituency",
             "summary":"Get constituency detail"
