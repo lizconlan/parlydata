@@ -6,7 +6,7 @@ This currently forms the basis of my final year university project so only a sma
 
 ## MIT License
 
-Copyright (C) 2012 Liz Conlan
+Copyright (c) 2012 Liz Conlan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -20,4 +20,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The API documentation is rendered using Swagger UI, copyright 2011 Wordnik, Inc.
 
-Swagger UI is supplied under the Apache License, Version 2.0. You may obtain a copy of the License at apache.org/licenses/LICENSE-2.0
+Swagger UI is supplied under the Apache License, Version 2.0. You may obtain a copy of the License at "apache.org/licenses/LICENSE-2.0":http://apache.org/licenses/LICENSE-2.0
