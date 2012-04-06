@@ -20,4 +20,4 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The API documentation is rendered using Swagger UI, copyright 2011 Wordnik, Inc.
 
-Swagger UI is supplied under the Apache License, Version 2.0. You may obtain a copy of the License at "apache.org/licenses/LICENSE-2.0":http://apache.org/licenses/LICENSE-2.0
+Swagger UI is supplied under the Apache License, Version 2.0. You may obtain a copy of the License at [apache.org/licenses/LICENSE-2.0](http://apache.org/licenses/LICENSE-2.0)
