@@ -56,6 +56,10 @@ class Constituency
     list
   end
   
+  def storable_name
+    name.downcase().gsub(" ","-").gsub('(',"").gsub(')',"") 
+  end
+  
   private
     def self.find_exact_or_fuzzy_match(name, year)
       list = Constituency.find_exact_matches_by_year(name, year)
