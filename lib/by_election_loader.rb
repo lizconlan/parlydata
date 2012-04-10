@@ -27,6 +27,7 @@ class ByElectionLoader
       else
         warn "#{record["constituency"]} not found :("
       end
+      election.id = "#{election.start_date.year}-#{election.start_date.month.to_s.rjust(2,"0")}-#{election.start_date.day.to_s.rjust(2,"0")}_#{constituency.storable_name}_ByElection"
       election.save
     end
   end
