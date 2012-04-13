@@ -10,9 +10,9 @@ class Constituency
   key :election_ids, Array
   
   def self.find_exact_matches_by_year(name ,year)
-    c = Constituency.where(:name => name, :year_created.lte => year, :year_abolished.gte => year)
+    c = Constituency.where(:name => /^#{name}$/i, :year_created.lte => year, :year_abolished.gte => year)
     list = c.all
-    c = Constituency.where(:name => name, :year_created.lte => year, :year_abolished.exists => false)
+    c = Constituency.where(:name => /^#{name}$/i, :year_created.lte => year, :year_abolished.exists => false)
     list += c.all
   end
   
@@ -25,15 +25,13 @@ class Constituency
   
   def self.find_constituency(name, year)
     name = name.gsub(":","") if name.include?(":")
+    if name =~ /( and | & )/
+      name = name.gsub($1, "(?: and | & )")
+    end
+    if name =~ /( (?:upon|under|le) |-(?:upon|under|le)-)/
+      name = name.gsub($1, " |-#{$1.gsub("-","").strip} |-")
+    end
     list = find_exact_or_fuzzy_match(name, year)
-    list = find_exact_or_fuzzy_match(name.gsub(" upon ", "-upon-"), year) if list.empty? and name.include?(" upon ")
-    list = find_exact_or_fuzzy_match(name.gsub("-upon-", " upon "), year) if list.empty? and name.include?("-upon-")    
-    list = find_exact_or_fuzzy_match(name.gsub(" under ", "-under-"), year) if list.empty? and name.include?(" under ")
-    list = find_exact_or_fuzzy_match(name.gsub("-under-", " under "), year) if list.empty? and name.include?("-under-")    
-    list = find_exact_or_fuzzy_match(name.gsub(" le ", "-le-"), year) if list.empty? and name.include?(" le ")
-    list = find_exact_or_fuzzy_match(name.gsub("-le-", " le "), year) if list.empty? and name.include?("-le-")
-    list = find_exact_or_fuzzy_match(name.gsub(" & ", " and "), year) if list.empty? and name.include?("&")
-    list = find_exact_or_fuzzy_match(name.gsub(" and ", " & "), year) if list.empty? and name.include?(" and ")
     list = find_exact_or_fuzzy_match(name.gsub(",", ""), year) if list.empty? and name.include?(",")
     if list.empty? and name =~ /(^South |^East |^North |^West |^Mid )(.*)/
       heading = $1
@@ -57,7 +55,7 @@ class Constituency
   end
   
   def storable_name
-    name.downcase().gsub(" ","-").gsub('(',"").gsub(')',"") 
+    name.downcase().gsub(" ","-").gsub('(',"").gsub(')',"")  
   end
   
   private

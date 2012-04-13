@@ -23,8 +23,8 @@ class ConstituencyTest < MiniTest::Unit::TestCase
     SymbolOperator.expects(:new).with(:year_abolished, 'gte').returns(@gte)
     SymbolOperator.expects(:new).with(:year_abolished, 'exists').returns(@exists)
     
-    Constituency.expects(:where).with({:name => name, @lte => year, @gte => year}).returns(results)
-    Constituency.expects(:where).with({:name => name, @lte => year, @exists => false}).returns(results)
+    Constituency.expects(:where).with({:name => /^#{name}$/i, @lte => year, @gte => year}).returns(results)
+    Constituency.expects(:where).with({:name => /^#{name}$/i, @lte => year, @exists => false}).returns(results)
     
     assert_equal [], Constituency.find_exact_matches_by_year(name, year)
   end
@@ -78,30 +78,35 @@ class ConstituencyTest < MiniTest::Unit::TestCase
   
   def test_ampersand_edge_case_1
     name = "Penrith & The Border"
-    
-    Constituency.expects(:find_exact_matches_by_year).with(name, 1970).returns([])
-    Constituency.expects(:find_fuzzy_matches_by_year).with(name, 1970).returns([])
-    Constituency.expects(:find_exact_matches_by_year).with("Penrith and The Border", 1970).returns([@result])
+    Constituency.expects(:find_exact_matches_by_year).with("Penrith(?: and | & )The Border", 1970).returns([@result])
     
     assert_equal [@result], Constituency.find_constituency(name, 1970)
   end
   
   def test_ampersand_edge_case_2
     name = "Fermanagh and South Tyrone"
-    
-    Constituency.expects(:find_exact_matches_by_year).with(name, 1970).returns([])
-    Constituency.expects(:find_fuzzy_matches_by_year).with(name, 1970).returns([])
-    Constituency.expects(:find_exact_matches_by_year).with("Fermanagh & South Tyrone", 1970).returns([@result])
+    Constituency.expects(:find_exact_matches_by_year).with("Fermanagh(?: and | & )South Tyrone", 1970).returns([@result])
     
     assert_equal [@result], Constituency.find_constituency(name, 1970)
   end
   
-  def test_hyphen_edge_case
+  def test_hyphen_edge_case_1
     name = "Newcastle upon Tyne Central"
+    Constituency.expects(:find_exact_matches_by_year).with("Newcastle |-upon |-Tyne Central", 1970).returns([@result])
     
-    Constituency.expects(:find_exact_matches_by_year).with(name, 1970).returns([])
-    Constituency.expects(:find_fuzzy_matches_by_year).with(name, 1970).returns([])
-    Constituency.expects(:find_exact_matches_by_year).with("Newcastle-upon-Tyne Central", 1970).returns([@result])
+    assert_equal [@result], Constituency.find_constituency(name, 1970)
+  end
+  
+  def test_hyphen_edge_case_2
+    name = "Newcastle-under-Lyme"
+    Constituency.expects(:find_exact_matches_by_year).with("Newcastle |-under |-Lyme", 1970).returns([@result])
+    
+    assert_equal [@result], Constituency.find_constituency(name, 1970)
+  end
+  
+  def test_hyphen_edge_case_3
+    name = "Chester le Street"
+    Constituency.expects(:find_exact_matches_by_year).with("Chester |-le |-Street", 1970).returns([@result])
     
     assert_equal [@result], Constituency.find_constituency(name, 1970)
   end
