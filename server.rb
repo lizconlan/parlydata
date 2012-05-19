@@ -22,7 +22,11 @@ get "/" do
   "intro text here"
 end
 
-get "/api/?" do
+get "/api/" do
+  redirect "/api"
+end
+
+get "/api" do
   #api documentation page
   File.read('public/api/index.html')
 end
