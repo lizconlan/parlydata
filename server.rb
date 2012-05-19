@@ -48,18 +48,15 @@ get "/api/constituencies/search" do
   end
 end
 
-get "/api/election/something.json" do
-end
-
 get "/api/constituencies/?" do
   content_type :json
   start = params[:start]
   start = start.to_i
   start = 1 if start < 1
-  if start > Constituency.all.size
+  if start > Constituency.count
     "[]"
   else
-    Constituency.all[start-1..start-1+9].to_json
+    Constituency.all(:offset => start-1, :limit => 10).to_json
   end
 end
 
@@ -72,6 +69,40 @@ get "/api/constituencies/:id/?" do
   else
     status 404
     %Q|{"message": "Constituency not found", "type": "error"}|
+  end
+end
+
+get "/api/elections/?" do
+  content_type :json
+  type = params[:type]
+  start = params[:start]
+  start = start.to_i
+  start = 1 if start < 1
+  
+  case type
+  when "ByElection"
+    elections = ByElection.all(:offset => start-1, :limit => 10).to_json
+  when "GeneralElection"
+    elections = GeneralElection.all(:offset => start-1, :limit => 10).to_json
+  else
+    elections = Election.all(:offset => start-1, :limit => 10).to_json
+  end
+  if elections == "null"
+      "[]"
+  else
+    elections
+  end
+end
+
+get "/api/elections/:id/?" do
+  content_type :json
+  id = params[:id]
+  election = Election.find(id)
+  if election
+    election.to_json
+  else
+    status 404
+    %Q|{"message": "Election not found", "type": "error"}|
   end
 end
 
@@ -98,7 +129,7 @@ get "/api/constituencies.json" do
             "responseTypeInternal":"com.parlydata.api.model.Constituency",
             "errorResponses":[],
             "nickname":"getConstituencies",
-            "responseClass":"constituency",
+            "responseClass":"List[constituency]",
             "summary":"Constituency list"
           }
         ]
@@ -156,7 +187,7 @@ get "/api/constituencies.json" do
             "responseTypeInternal":"com.parlydata.api.model.Constituency",
             "errorResponses":[{"reason":"Constituency not found","code":404}],
             "nickname":"getConsituencySearch",
-            "responseClass":"constituency",
+            "responseClass":"List[constituency]",
             "summary":"Constituency search"
           }
         ]
@@ -172,16 +203,93 @@ get "/api/constituencies.json" do
           "year_created":{"type":"int"}
         },
         "id":"constituency"
-      },
-      "Pet":{"properties":{"tags":{"type":"array","items":{"$ref":"tag"}},"id":{"type":"long"},"category":{"type":"category"},"status":{"type":"string","description":"pet status in the store","allowableValues":{"values":["available","pending","sold"],"valueType":"LIST"}},"name":{"type":"string"},"photoUrls":{"type":"array","items":{"type":"string"}}},"id":"pet"},
-      "Tag":{"properties":{"id":{"type":"long"},"name":{"type":"string"}},"id":"tag"}
+      }
     },
     "basePath":"#{@base_path}",
-    "swaggerVersion":"1.1-SHAPSHOT.121026",
+    "swaggerVersion":"1.0",
+    "apiVersion":"1"}|
+end
+
+get "/api/elections.json" do
+  #json file for Swagger
+  %|{"apis":[
+      {
+        "path":"/elections",
+        "description":"List of elections",
+        "operations":[
+          {
+            "parameters":[
+              {
+                "name":"start",
+                "description":"Offset parameter for pagination",
+                "dataType":"integer",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              },
+              {
+                "name":"type",
+                "description":"Optional election type to filter by - ByElection or GeneralElection",
+                "dataType":"string",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              }
+            ],
+            "httpMethod":"GET",
+            "notes":"Returns a list of elections, 10 at a time",
+            "responseTypeInternal":"com.parlydata.api.model.Election",
+            "errorResponses":[],
+            "nickname":"getElections",
+            "responseClass":"List[election]",
+            "summary":"Election list"
+          }
+        ]
+      },
+      {
+        "path":"/elections/{electionID}",
+        "description":"Election detail",
+        "operations":[
+          {
+            "parameters":[
+              {
+                "name":"electionID",
+                "description":"ID of the election to be fetched",
+                "dataType":"string",
+                "required":true,
+                "allowMultiple":false,
+                "paramType":"path"
+              }
+            ],
+            "httpMethod":"GET",
+            "notes":"Returns an individual election record, or a 404 error if no match is found",
+            "responseTypeInternal":"com.parlydata.api.model.Election",
+            "errorResponses":[{"reason":"Election not found","code":404}],
+            "nickname":"getElection",
+            "responseClass":"election",
+            "summary":"Get election by ID"
+          }
+        ]
+      }
+    ],
+    "models": {
+      "Election":{
+        "properties":{
+          "election_ids":{"type":"array","items":{"$ref":"election"}},
+          "id":{"type":"string"},
+          "name":{"type":"string"},
+          "year_abolished":{"type":"int"},
+          "year_created":{"type":"int"}
+        },
+        "id":"election"
+      }
+    },
+    "basePath":"#{@base_path}",
+    "swaggerVersion":"1.0",
     "apiVersion":"1"}|
 end
 
 get "/api/resources.json" do
   #resources.json for Swagger
-  %|{"apis":[{"path":"/constituencies.{format}","description":"Operations about constituency"}],"basePath":"#{@base_path}","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
+  %|{"apis":[{"path":"/constituencies.{format}","description":"Operations about constituencies"},{"path":"/elections.{format}","description":"Operations about elections"}],"basePath":"#{@base_path}","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
 end
