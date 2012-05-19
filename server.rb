@@ -99,7 +99,7 @@ get "/api/constituencies.json" do
             "errorResponses":[],
             "nickname":"getConstituencies",
             "responseClass":"constituency",
-            "summary":"Get constituency list"
+            "summary":"Constituency list"
           }
         ]
       },
@@ -119,12 +119,12 @@ get "/api/constituencies.json" do
               }
             ],
             "httpMethod":"GET",
-            "notes":"Returns an individual constituency record",
+            "notes":"Returns an individual constituency record, or a 404 error if no match is found",
             "responseTypeInternal":"com.parlydata.api.model.Constituency",
             "errorResponses":[{"reason":"Constituency not found","code":404}],
             "nickname":"getConstituency",
             "responseClass":"constituency",
-            "summary":"Get constituency"
+            "summary":"Get constituency by ID"
           }
         ]
       },
@@ -152,7 +152,7 @@ get "/api/constituencies.json" do
               }
             ],
             "httpMethod":"GET",
-            "notes":"Returns a list of matching constituencies or a 404 error if none are found",
+            "notes":"Returns a list of matching constituencies or a 404 error if no matches are found",
             "responseTypeInternal":"com.parlydata.api.model.Constituency",
             "errorResponses":[{"reason":"Constituency not found","code":404}],
             "nickname":"getConsituencySearch",
