@@ -33,7 +33,7 @@ end
 
 get "/api/constituencies/search" do
   content_type :json
-  name = params[:name]
+  name = params[:q]
   year = params[:year]
   if name and year
     constituencies = Constituency.find_constituency(name, year.to_i)
@@ -61,8 +61,8 @@ get "/api/constituencies.json" do
           {
             "parameters":[
               {
-                "name":"name",
-                "description":"Constituency name",
+                "name":"q",
+                "description":"Search query (For best results, use a constituency name)",
                 "dataType":"string",
                 "required":true,
                 "allowMultiple":false,
@@ -78,7 +78,7 @@ get "/api/constituencies.json" do
               }
             ],
             "httpMethod":"GET",
-            "notes":"Returns a matching constituency, if found",
+            "notes":"Returns a list of matching constituencies or a 404 error if none are found",
             "responseTypeInternal":"com.parlydata.api.model.Constituency",
             "errorResponses":[{"reason":"Constituency not found","code":404}],
             "nickname":"getDetail",
