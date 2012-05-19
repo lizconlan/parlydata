@@ -51,12 +51,49 @@ end
 get "/api/election/something.json" do
 end
 
+get "/api/constituencies/?" do
+  content_type :json
+  start = params[:start]
+  start = start.to_i
+  start = 1 if start < 1
+  if start > Constituency.all.size
+    "[]"
+  else
+    Constituency.all[start-1..start-1+9].to_json
+  end
+end
+
 get "/api/constituencies.json" do
   #json file for Swagger
   %|{"apis":[
       {
+        "path":"/constituencies",
+        "description":"List of constituencies",
+        "operations":[
+          {
+            "parameters":[
+              {
+                "name":"start",
+                "description":"Offset parameter for pagination",
+                "dataType":"integer",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              }
+            ],
+            "httpMethod":"GET",
+            "notes":"Returns a list of constituencies, 10 at a time",
+            "responseTypeInternal":"com.parlydata.api.model.Constituency",
+            "errorResponses":[],
+            "nickname":"getConstituencies",
+            "responseClass":"constituency",
+            "summary":"Get constituency list"
+          }
+        ]
+      },
+      {
         "path":"/constituencies/search",
-        "description":"Constituency info",
+        "description":"Constituency search",
         "operations":[
           {
             "parameters":[
@@ -81,9 +118,9 @@ get "/api/constituencies.json" do
             "notes":"Returns a list of matching constituencies or a 404 error if none are found",
             "responseTypeInternal":"com.parlydata.api.model.Constituency",
             "errorResponses":[{"reason":"Constituency not found","code":404}],
-            "nickname":"getDetail",
+            "nickname":"getConsituencySearch",
             "responseClass":"constituency",
-            "summary":"Get constituency detail"
+            "summary":"Constituency search"
           }
         ]
       }
