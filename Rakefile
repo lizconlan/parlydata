@@ -7,6 +7,7 @@ require 'mongo_mapper'
 require_relative 'lib/constituency_loader'
 require_relative 'lib/regnal_year_loader'
 require_relative 'lib/by_election_loader'
+require_relative 'lib/general_election_loader'
 
 MONGO_URL = ENV['MONGOHQ_URL'] || YAML::load(File.read("config/mongo.yml"))[:mongohq_url]
 env = {}
@@ -15,14 +16,17 @@ MongoMapper.connect(env)
 
 desc "load all the data"
 task :load_all do
-  cl = ConstituencyLoader.new
-  cl.load_from_scraperwiki()
+  # cl = ConstituencyLoader.new
+  # cl.load_from_scraperwiki()
   # 
   # ryl = RegnalYearLoader.new
   # ryl.load_from_scraperwiki()
+  # 
+  # bel = ByElectionLoader.new
+  # bel.load_from_file()
   
-  bel = ByElectionLoader.new
-  bel.load_from_file()
+  gel = GeneralElectionLoader.new
+  gel.load_from_file()
 end
 
 require 'rake/testtask'

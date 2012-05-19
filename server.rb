@@ -24,10 +24,10 @@ end
 
 get "/api/?" do
   #api documentation page
-  File.read(File.join('public/api', 'index.html'))
+  File.read('public/api/index.html')
 end
 
-get "/api/constituency/detail.json?" do
+get "/api/constituencies/search" do
   content_type :json
   name = params[:name]
   year = params[:year]
@@ -44,11 +44,14 @@ get "/api/constituency/detail.json?" do
   end
 end
 
-get "/api/constituency.json" do
+get "/api/election/something.json" do
+end
+
+get "/api/constituencies.json" do
   #json file for Swagger
   %|{"apis":[
       {
-        "path":"/constituency/detail.json",
+        "path":"/constituencies/search",
         "description":"Constituency info",
         "operations":[
           {
@@ -71,7 +74,7 @@ get "/api/constituency.json" do
               }
             ],
             "httpMethod":"GET",
-            "notes":"Returns detailed information about a given constituency",
+            "notes":"Returns a matching constituency, if found",
             "responseTypeInternal":"com.parlydata.api.model.Constituency",
             "errorResponses":[{"reason":"Constituency not found","code":404}],
             "nickname":"getDetail",
@@ -102,5 +105,5 @@ end
 
 get "/api/resources.json" do
   #resources.json for Swagger
-  %|{"apis":[{"path":"/constituency.{format}","description":"Operations about constituency"}],"basePath":"#{@base_path}","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
+  %|{"apis":[{"path":"/constituencies.{format}","description":"Operations about constituency"}],"basePath":"#{@base_path}","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
 end
