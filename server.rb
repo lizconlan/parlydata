@@ -63,6 +63,18 @@ get "/api/constituencies/?" do
   end
 end
 
+get "/api/constituencies/:id/?" do
+  content_type :json
+  id = params[:id]
+  constituency = Constituency.find(id)
+  if constituency
+    constituency.to_json
+  else
+    status 404
+    %Q|{"message": "Constituency not found", "type": "error"}|
+  end
+end
+
 get "/api/constituencies.json" do
   #json file for Swagger
   %|{"apis":[
@@ -88,6 +100,31 @@ get "/api/constituencies.json" do
             "nickname":"getConstituencies",
             "responseClass":"constituency",
             "summary":"Get constituency list"
+          }
+        ]
+      },
+      {
+        "path":"/constituencies/{constituencyID}",
+        "description":"Constituency detail",
+        "operations":[
+          {
+            "parameters":[
+              {
+                "name":"constituencyID",
+                "description":"ID of the constituency to be fetched",
+                "dataType":"string",
+                "required":true,
+                "allowMultiple":false,
+                "paramType":"path"
+              }
+            ],
+            "httpMethod":"GET",
+            "notes":"Returns an individual constituency record",
+            "responseTypeInternal":"com.parlydata.api.model.Constituency",
+            "errorResponses":[{"reason":"Constituency not found","code":404}],
+            "nickname":"getConstituency",
+            "responseClass":"constituency",
+            "summary":"Get constituency"
           }
         ]
       },
