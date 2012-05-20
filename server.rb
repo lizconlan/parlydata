@@ -275,11 +275,12 @@ get "/api/elections.json" do
     "models": {
       "Election":{
         "properties":{
-          "election_ids":{"type":"array","items":{"$ref":"election"}},
+          "_type": {"type":"string"},
+          "constituency_id":{"type":"string","$ref":"constituency"},
+          "end_date": {"type":"string"},
           "id":{"type":"string"},
-          "name":{"type":"string"},
-          "year_abolished":{"type":"int"},
-          "year_created":{"type":"int"}
+          "reason":{"type":"string"},
+          "start_date":{"type":"string"}
         },
         "id":"election"
       }
