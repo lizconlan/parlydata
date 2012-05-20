@@ -206,7 +206,7 @@ get "/api/constituencies.json" do
       }
     },
     "basePath":"#{@base_path}",
-    "swaggerVersion":"1.0",
+    "swaggerVersion":"1.1-SHAPSHOT.121026",
     "apiVersion":"1"}|
 end
 
@@ -286,7 +286,7 @@ get "/api/elections.json" do
       }
     },
     "basePath":"#{@base_path}",
-    "swaggerVersion":"1.0",
+    "swaggerVersion":"1.1-SHAPSHOT.121026",
     "apiVersion":"1"}|
 end
 
