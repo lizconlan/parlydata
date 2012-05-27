@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'mongo_mapper'
 
 class Constituency
@@ -28,6 +30,7 @@ class Constituency
       bracketed_text = $1
       name = name.gsub('(','\(').gsub(')','\)')
     end
+    name = "Ynys Môn" if name == "Ynys Mon"
     name = name.gsub(":","") if name.include?(":")
     if name =~ /( and | & )/
       name = name.gsub($1, "(?: and | & )")
@@ -50,8 +53,14 @@ class Constituency
         heading = "#{heading} #{$1}".squeeze(" ").strip
         the_rest = $2
       end
-      list = find_exact_or_fuzzy_match("#{the_rest} #{heading}".squeeze(" ").strip, year)
-    end
+      if the_rest =~ /(.*)\(\?: and \| & \)(.*)/
+        part1 = $1
+        part3 = $2
+        list = find_exact_or_fuzzy_match("#{part1} #{heading.strip}(?: and | & )#{part3}".squeeze(" ").strip, year)
+      else
+        list = find_exact_or_fuzzy_match("#{the_rest} #{heading}".squeeze(" ").strip, year)
+      end
+    end    
     if list.empty? and name =~ /(.*)( South$| East$| North$| West$)/
       heading = $2
       the_rest = $1
@@ -66,6 +75,18 @@ class Constituency
       else
         list = find_exact_or_fuzzy_match("#{heading} #{the_rest}".squeeze(" ").strip, year)
       end
+    end
+    if list.empty? and name =~ /(.*)(South|East|North|West)\(\?: and \| & \)(.*)/
+      part1 = $1
+      heading = $2
+      part3 = $3
+      list = find_exact_or_fuzzy_match("#{heading} #{part1.strip}(?: and | & )#{part3}".squeeze(" ").strip, year)
+    end
+    if list.empty? and name =~ /(.*)\(\?: and \| & \)(South |East |North |West )(.*)/
+      part1 = $1
+      heading = $2
+      part3 = $3
+      list = find_exact_or_fuzzy_match("#{part1}(?: and | & )#{part3} #{heading.strip}".squeeze(" ").strip, year)
     end
     list
   end

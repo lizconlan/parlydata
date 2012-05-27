@@ -148,7 +148,7 @@ class ConstituencyTest < MiniTest::Unit::TestCase
     assert_equal [@result], Constituency.find_constituency(name, 1970)
   end
   
-  def test_complex_west_case
+  def test_complex_heading_case_1
     name = "Dunfermline and Fife West"
     
     Constituency.expects(:find_exact_matches_by_year).with("Dunfermline(?: and | & )Fife West", 2005).returns([])
@@ -156,5 +156,18 @@ class ConstituencyTest < MiniTest::Unit::TestCase
     Constituency.expects(:find_exact_matches_by_year).with("Dunfermline(?: and | & )West Fife", 2005).returns([@result])
     
     assert_equal [@result], Constituency.find_constituency(name, 2005)
+  end
+  
+  def test_complex_heading_case_2
+    name = "Basildon South and Thurrock East"
+    #South Basildon and East Thurrock
+    
+    Constituency.expects(:find_exact_matches_by_year).with("Basildon South(?: and | & )Thurrock East", 2010).returns([])
+    Constituency.expects(:find_fuzzy_matches_by_year).with("Basildon South(?: and | & )Thurrock East", 2010).returns([])
+    Constituency.expects(:find_exact_matches_by_year).with("Basildon South(?: and | & )East Thurrock", 2010).returns([])
+    Constituency.expects(:find_fuzzy_matches_by_year).with("Basildon South(?: and | & )East Thurrock", 2010).returns([])
+    Constituency.expects(:find_exact_matches_by_year).with("South Basildon(?: and | & )Thurrock East", 2010).returns([@result])
+    
+    assert_equal [@result], Constituency.find_constituency(name, 2010)
   end
 end
