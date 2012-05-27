@@ -49,7 +49,13 @@ class Constituency
         heading = "#{$2} #{heading}".squeeze(" ").strip
         the_rest = $1
       end
-      list = find_exact_or_fuzzy_match("#{heading} #{the_rest}".squeeze(" ").strip, year)
+      if the_rest =~ /(.*)\(\?: and \| & \)(.*)/
+        part1 = $1
+        part3 = $2
+        list = find_exact_or_fuzzy_match("#{part1}(?: and | & )#{heading.strip} #{part3}".squeeze(" ").strip, year)
+      else
+        list = find_exact_or_fuzzy_match("#{heading} #{the_rest}".squeeze(" ").strip, year)
+      end
     end
     list
   end

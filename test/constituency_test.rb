@@ -130,4 +130,14 @@ class ConstituencyTest < MiniTest::Unit::TestCase
     
     assert_equal [@result], Constituency.find_constituency(name, 1970)
   end
+  
+  def test_complex_west_case
+    name = "Dunfermline and Fife West"
+    
+    Constituency.expects(:find_exact_matches_by_year).with("Dunfermline(?: and | & )Fife West", 2005).returns([])
+    Constituency.expects(:find_fuzzy_matches_by_year).with("Dunfermline(?: and | & )Fife West", 2005).returns([])
+    Constituency.expects(:find_exact_matches_by_year).with("Dunfermline(?: and | & )West Fife", 2005).returns([@result])
+    
+    assert_equal [@result], Constituency.find_constituency(name, 2005)
+  end
 end
