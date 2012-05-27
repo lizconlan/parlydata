@@ -34,7 +34,7 @@ class ConstituencyLoader
     
     retirements = data["abolished"]
     retirements.each do |name|
-      constituency = Constituency.find_constituency(name, year.to_i)
+      constituency = Constituency.find_exact_matches_by_year(name, year.to_i)
       constituency.first.year_abolished = year
       constituency.first.save
     end
