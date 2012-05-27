@@ -76,6 +76,13 @@ class ConstituencyTest < MiniTest::Unit::TestCase
     assert_equal [@result], Constituency.find_constituency(name, 2000)
   end
   
+  def test_bracket_edge_case
+    name = "Richmond (Yorks)"
+    Constituency.expects(:find_exact_matches_by_year).with('Richmond \(Yorks\)', 2000).returns([@result])
+    
+    assert_equal [@result], Constituency.find_constituency(name, 2000)
+  end
+  
   def test_ampersand_edge_case_1
     name = "Penrith & The Border"
     Constituency.expects(:find_exact_matches_by_year).with("Penrith(?: and | & )The Border", 1970).returns([@result])

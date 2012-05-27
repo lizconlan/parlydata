@@ -24,6 +24,7 @@ class Constituency
   end
   
   def self.find_constituency(name, year)
+    name = name.gsub('(','\(').gsub(')','\)')
     name = name.gsub(":","") if name.include?(":")
     if name =~ /( and | & )/
       name = name.gsub($1, "(?: and | & )")
