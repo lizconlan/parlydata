@@ -16,10 +16,37 @@ class ConstituencyLoader
       constituency = Constituency.new
       constituency.name = record["name"]
       constituency.name = "Richmond (Yorks)" if constituency.name == "Richmond" and record["link"] =~ /yorkshire/
+      if constituency.name =~ /(.*), The/
+        constituency.name = "The #{$1.strip}"
+      end
       constituency.year_created = record["created"]
       if record["abolished"]
         constituency.year_abolished = record["abolished"]
       end
+      constituency.id = "#{constituency.storable_name}_#{constituency.year_created}"
+      constituency.save
+    end
+  end
+  
+  def load_changes(year)
+    file = "data/#{year}_constituencies.js"
+    data = JSON.parse(File.read(file))
+    
+    retirements = data["abolished"]
+    retirements.each do |name|
+      constituency = Constituency.find_constituency(name, year.to_i)
+      constituency.first.year_abolished = year
+      constituency.first.save
+    end
+    
+    new_entries = data["created"]
+    new_entries.each do |name|
+      constituency = Constituency.new
+      constituency.name = name
+      if constituency.name =~ /(.*), The/
+        constituency.name = "The #{$1.strip}"
+      end
+      constituency.year_created = year
       constituency.id = "#{constituency.storable_name}_#{constituency.year_created}"
       constituency.save
     end
