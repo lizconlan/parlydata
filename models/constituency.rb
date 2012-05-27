@@ -24,7 +24,10 @@ class Constituency
   end
   
   def self.find_constituency(name, year)
-    name = name.gsub('(','\(').gsub(')','\)')
+    if name =~ /(\(.*\))/
+      bracketed_text = $1
+      name = name.gsub('(','\(').gsub(')','\)')
+    end
     name = name.gsub(":","") if name.include?(":")
     if name =~ /( and | & )/
       name = name.gsub($1, "(?: and | & )")
@@ -34,6 +37,12 @@ class Constituency
     end
     list = find_exact_or_fuzzy_match(name, year)
     list = find_exact_or_fuzzy_match(name.gsub(",", ""), year) if list.empty? and name.include?(",")
+    if list.empty? and bracketed_text
+      bracketed_text = bracketed_text.gsub('(','\(').gsub(')','\)')
+      name = name.gsub(bracketed_text, "").strip
+      list = find_exact_or_fuzzy_match(name, year)
+      list = find_exact_or_fuzzy_match(name.gsub(",", ""), year) if list.empty? and name.include?(",")
+    end
     if list.empty? and name =~ /(^South |^East |^North |^West |^Mid )(.*)/
       heading = $1
       the_rest = $2

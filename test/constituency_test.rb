@@ -118,6 +118,16 @@ class ConstituencyTest < MiniTest::Unit::TestCase
     assert_equal [@result], Constituency.find_constituency(name, 1970)
   end
   
+  def text_bracket_edge_case
+    name = "Ribble South (South Ribble)"
+    
+    Constituency.expects(:find_exact_matches_by_year).with(name, 2005).returns([])
+    Constituency.expects(:find_fuzzy_matches_by_year).with(name, 2005).returns([])
+    Constituency.expects(:find_exact_matches_by_year).with("Ribble South", 2005).returns([@result])
+    
+    assert_equal [@result], Constituency.find(name, 2005)
+  end
+  
   def test_name_south_vs_south_name
     name = "South East Staffordshire"
     
