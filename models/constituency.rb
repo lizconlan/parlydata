@@ -25,19 +25,27 @@ class Constituency
     list += c.all
   end
   
-  def self.find_constituency(name, year)
+  def self.find_constituency(name, year, replace_spaces=nil)
+    start_name = name
     if name =~ /(\(.*\))/
       bracketed_text = $1
       name = name.gsub('(','\(').gsub(')','\)')
     end
     name = "Ynys Môn" if name == "Ynys Mon"
     name = name.gsub(":","") if name.include?(":")
+    
+    if name =~ /( (?:upon|under|le) |-(?:upon|under|le)-)/
+      name = name.gsub($1, " |-#{$1.gsub("-","").strip} |-")
+    else
+      if replace_spaces
+        name = name.gsub(" ", ",? ").gsub(",,?", ",")
+      end
+    end
+    
     if name =~ /( and | & )/
       name = name.gsub($1, "(?: and | & )")
     end
-    if name =~ /( (?:upon|under|le) |-(?:upon|under|le)-)/
-      name = name.gsub($1, " |-#{$1.gsub("-","").strip} |-")
-    end
+    
     list = find_exact_or_fuzzy_match(name, year)
     list = find_exact_or_fuzzy_match(name.gsub(",", ""), year) if list.empty? and name.include?(",")
     if list.empty? and bracketed_text
@@ -46,10 +54,10 @@ class Constituency
       list = find_exact_or_fuzzy_match(name, year)
       list = find_exact_or_fuzzy_match(name.gsub(",", ""), year) if list.empty? and name.include?(",")
     end
-    if list.empty? and name =~ /(^South |^East |^North |^West |^Mid )(.*)/
+    if list.empty? and name =~ /(^South |^East |^North |^West |^Mid |^Central)(.*)/
       heading = $1
       the_rest = $2
-      if the_rest =~ /(^South |^East |^North |^West )(.*)/
+      if the_rest =~ /(^South |^East |^North |^West |^Mid)(.*)/
         heading = "#{heading} #{$1}".squeeze(" ").strip
         the_rest = $2
       end
@@ -61,7 +69,7 @@ class Constituency
         list = find_exact_or_fuzzy_match("#{the_rest} #{heading}".squeeze(" ").strip, year)
       end
     end    
-    if list.empty? and name =~ /(.*)( South$| East$| North$| West$)/
+    if list.empty? and name =~ /(.*)( South$| East$| North$| West$| Mid$| Central$)/
       heading = $2
       the_rest = $1
       if the_rest =~ /(.*)( South$| East$| North$| West$)/
@@ -87,6 +95,19 @@ class Constituency
       heading = $2
       part3 = $3
       list = find_exact_or_fuzzy_match("#{part1}(?: and | & )#{part3} #{heading.strip}".squeeze(" ").strip, year)
+    end
+    if list.empty? and name =~ /(.*)(South|East|North|West)\(\?: and \| & \)(.*)( South$| East$| North$| West$)/
+      part1 = $1
+      heading1 = $2
+      part2 = $3
+      heading2 = $4
+      list = find_exact_or_fuzzy_match("#{heading1} #{part1.strip}(?: and | & )#{heading2.strip} #{part2.strip}", year)
+    end
+    
+    unless replace_spaces
+      if list.empty?
+        list = self.find_constituency(start_name, year, true)
+      end
     end
     list
   end

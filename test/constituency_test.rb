@@ -166,7 +166,9 @@ class ConstituencyTest < MiniTest::Unit::TestCase
     Constituency.expects(:find_fuzzy_matches_by_year).with("Basildon South(?: and | & )Thurrock East", 2010).returns([])
     Constituency.expects(:find_exact_matches_by_year).with("Basildon South(?: and | & )East Thurrock", 2010).returns([])
     Constituency.expects(:find_fuzzy_matches_by_year).with("Basildon South(?: and | & )East Thurrock", 2010).returns([])
-    Constituency.expects(:find_exact_matches_by_year).with("South Basildon(?: and | & )Thurrock East", 2010).returns([@result])
+    Constituency.expects(:find_exact_matches_by_year).with("South Basildon(?: and | & )Thurrock East", 2010).returns([])
+    Constituency.expects(:find_fuzzy_matches_by_year).with("South Basildon(?: and | & )Thurrock East", 2010).returns([])
+    Constituency.expects(:find_exact_matches_by_year).with("South Basildon(?: and | & )East Thurrock", 2010).returns([@result])    
     
     assert_equal [@result], Constituency.find_constituency(name, 2010)
   end
