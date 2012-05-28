@@ -18,7 +18,7 @@ end
 class Election < TimelineElement
   has_many :election_results
   
-  key :constituency, String
+  key :election_result_ids, Array
 end
 
 class GeneralElection < Election
