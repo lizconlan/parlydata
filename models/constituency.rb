@@ -32,11 +32,16 @@ class Constituency
       name = name.gsub('(','\(').gsub(')','\)')
     end
     name = "Ynys Môn" if name == "Ynys Mon"
+    name = name.gsub("Shepherd's Bush", "Shepherds Bush")
+    name = "Chester" if name == "City of Chester"
+    name = "Durham" if name == "City of Durham"
+    name = "York" if name == "City of York"
     name = name.gsub(":","") if name.include?(":")
     
     if name =~ /( (?:upon|under|le) |-(?:upon|under|le)-)/
       name = name.gsub($1, " |-#{$1.gsub("-","").strip} |-")
     else
+      name = name.gsub("-", "-| ") unless name =~ /h-Eileanan/
       if replace_spaces
         name = name.gsub(" ", ",? ").gsub(",,?", ",")
       end
