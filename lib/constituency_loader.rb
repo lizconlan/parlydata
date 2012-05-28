@@ -46,6 +46,7 @@ class ConstituencyLoader
       if constituency.name =~ /(.*), The/
         constituency.name = "The #{$1.strip}"
       end
+      constituency.name = "Lindsey East" if constituency_name == "Linsey East"
       constituency.year_created = year
       constituency.id = "#{constituency.storable_name}_#{constituency.year_created}"
       constituency.save
