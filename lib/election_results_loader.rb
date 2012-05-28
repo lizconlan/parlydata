@@ -137,8 +137,6 @@ private
       "Cambridge South West"
     when "West Renfrewshire and Inverclyde"
       "Renfrew West and Inverclyde"
-    when "Cirencester and Tewekesbury"
-      "Cirencester and Tewkesbury"
     else
       name
     end
