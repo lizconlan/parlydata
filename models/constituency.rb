@@ -31,6 +31,7 @@ class Constituency
       bracketed_text = $1
       name = name.gsub('(','\(').gsub(')','\)')
     end
+    name = name.gsub("Tewekesbury", "Tewkesbury")
     name = "Ynys Môn" if name == "Ynys Mon"
     name = name.gsub("Shepherd's Bush", "Shepherds Bush")
     name = "Chester" if name == "City of Chester"
