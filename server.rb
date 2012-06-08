@@ -19,7 +19,7 @@ end
 
 get "/" do
   #welcome/intro/human-friendly explanatory page
-  "intro text here"
+  "[insert explanation of service, available data sets, limitations, acknowledgements]"
 end
 
 get "/api/" do
@@ -106,6 +106,8 @@ get "/api/elections/:id/?" do
   end
 end
 
+
+#Swagger things
 get "/api/constituencies.json" do
   #json file for Swagger
   %|{"apis":[
