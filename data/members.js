@@ -98,5 +98,53 @@
         "surname": "Wright",
         "forenames": "Iain",
         "born": "9 May 1972"
+    },
+    {
+        "title": "Ms",
+        "surname": "Dorries",
+        "forenames": "Nadine",
+        "born": "21 May 1957"
+    },
+    {
+        "title": "Mr",
+        "surname": "Murphy",
+        "forenames": "Conor",
+        "born": "10 July 1963"
+    },
+    {
+        "title": "Mr",
+        "surname": "Wilson",
+        "forenames": "Rob",
+        "born": "4 January 1965"
+    },
+    {
+        "title": "Mr",
+        "surname": "Hurd",
+        "forenames": "Nick",
+        "born": "13 May 1962"
+    },
+    {
+        "title": "Mr",
+        "surname": "Pritchard",
+        "forenames": "Mark",
+        "born": "22 November 1966"
+    },
+    {
+        "title": "Dr",
+        "surname": "Clark",
+        "forenames": "Greg",
+        "born": "28 August 1967"
+    },
+    {
+        "title": "Mr",
+        "surname": "Simpson",
+        "forenames": "David",
+        "born": "16 February 1959"
+    },
+    {
+        "title": "Mr",
+        "surname": "Brokenshire",
+        "forenames": "James",
+        "born": " 7 January 1968"
     }
 ]

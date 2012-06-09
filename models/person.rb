@@ -87,7 +87,9 @@ class Person
       when "Michael"        
         forenames = forenames.gsub("Michael", "(?:Michael)|(?:Mick)|(?:Mike)")
       when "Sion"
-        forenames = forenames.gsub("Sion", "Siôn")
+        forenames = "Siôn"
+      when "Sian"
+        forenames = "Siân"
       when /(Ste(?:(?:ph)|v)en)/
         forenames = forenames.gsub($1, "(?:Stephen)|(?:Steven)|(?:Steve)")
       when "Llewellyn"

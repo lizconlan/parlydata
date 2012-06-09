@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'rest-client'
 require 'json'
 require 'date'
@@ -20,6 +22,10 @@ class PersonLoader
       
       if person.forenames == "Michael" and person.surname == "Foster" and person.born.to_s == "1946-02-26"
         person.forenames = "Michael Jabez"
+      end
+      
+      if person.forenames == "Sîan" and person.surname == "James"
+        person.forenames = "Siân"
       end
       
       if person.forenames == "David" and person.surname == "Young" and person.born.to_s == "1928-10-12"

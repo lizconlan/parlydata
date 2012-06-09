@@ -53,6 +53,8 @@ private
         person = [Person.find("Wright_T_1948")]
       elsif name == "Angela Smith" and constituency_name == "Basildon"
         person = [Person.find("Smith_A_1959")]
+      elsif name == "Angela Smith" and constituency_name == "Sheffield Hillsborough"
+        person = [Person.find("Smith_A_1961")]
       elsif name == "Alan Williams" and (constituency_name == "Carmarthen East and Dinefwr" or constituency_name == "Carmarthen")
         person = [Person.find("Williams_A_1945")]
       elsif name == "Alan Williams" and constituency_name == "Swansea West"
@@ -97,6 +99,10 @@ private
         person = [Person.find("Anderson_D_1953")]
       elsif name == "Philip Dunne" and constituency_name == "Ludlow"
         person = [Person.find("Dunne_P_1958")]
+      elsif name == "David Davies" and constituency_name == "Monmouth"
+        person = [Person.find("Davies_D_1970")]
+      elsif name == "Jeremy Browne" and constituency_name =~ /^Taunton/
+        person = [Person.find("Browne_J_1970")]
       else
         person = Person.find_all_by_name(name)
       end
