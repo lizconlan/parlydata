@@ -87,6 +87,9 @@ class PersonLoader
       else
         year = "xxxx"
       end
+      if record["aka"]
+        person.add_aka(record["aka"])
+      end
       person.id = "#{person.surname}_#{person.forenames[0..0]}_#{year}"
       person.save
     end
