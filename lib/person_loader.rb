@@ -82,7 +82,12 @@ class PersonLoader
       person.title = record["title"] if record["title"]
       person.born = record["born"]
       person.died = record["died"] if record["died"]
-      person.id = "#{person.surname}_#{person.forenames[0..0]}_#{person.born.year}"
+      if person.born
+        year = person.born.year
+      else
+        year = "xxxx"
+      end
+      person.id = "#{person.surname}_#{person.forenames[0..0]}_#{year}"
       person.save
     end
   end
