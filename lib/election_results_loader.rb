@@ -8,9 +8,9 @@ require_relative '../models/member'
 
 class GeneralElectionResultsLoader
   def load_from_the_guardian()
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2010/results/json", "2010")
-    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2005/results/json", "2005")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2010/results/json", "2010")
     
+    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2005/results/json", "2005")
     # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2001/results/json", "2001")
     # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1997/results/json", "1997")
     # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1992/results/json", "1992")
@@ -24,16 +24,21 @@ private
     
     election = GeneralElection.find(/^#{year}/)
     
+    counter = 0
     data["results"]["called-constituencies"].each do |record|
+      counter = counter+1
       result = ElectionResult.new
       result.election_id = election.id
       
       constituency_name = record["name"]
       
       #debug
+      p counter
       p "#{constituency_name} - #{record["result"]["winning-mp"]["name"]}"
       
       name = record["result"]["winning-mp"]["name"]
+      name.gsub!("SImon", "Simon")
+      name = "Ed Miliband" if name == "Sophie Brodie" #cheers Guardian, cracking one that
       
       #do person/member stuff
       ##catch mistakes/oddities
@@ -46,14 +51,21 @@ private
       name = "Colin Shepherd" if name == "Colin Shephard"
       name = "Katy Clark" if name == "Katy Clarke"
       
-      ## reformat as case statement when finished
+      ## reformat as case statement when finished?
+      if name == "Ian Paisley" 
+        if year > 2009
+          person = [Person.find("Paisley_I_1966")]
+        else
+          person = [Person.find("I_Paisley_I_1926")]
+        end
+      end
       if name == "Anthony Wright" and constituency_name == "Great Yarmouth"
         person = [Person.find("Wright_T_1954")]
       elsif name == "Tony Wright" and (constituency_name == "Cannock Chase" or constituency_name == "Cannock and Burntwood")
         person = [Person.find("Wright_T_1948")]
       elsif name == "Angela Smith" and constituency_name == "Basildon"
         person = [Person.find("Smith_A_1959")]
-      elsif name == "Angela Smith" and constituency_name == "Sheffield Hillsborough"
+      elsif name == "Angela Smith" and (constituency_name == "Sheffield Hillsborough" or constituency_name == "Penistone and Stocksbridge")
         person = [Person.find("Smith_A_1961")]
       elsif name == "Alan Williams" and (constituency_name == "Carmarthen East and Dinefwr" or constituency_name == "Carmarthen")
         person = [Person.find("Williams_A_1945")]
@@ -114,7 +126,12 @@ private
         person = person.first
       end
       
-      p "found: #{person.forenames} #{person.surname}, #{person.born.year}"
+      begin
+        yr = person.born.year
+      rescue
+        yr = person.born
+      end
+      p "found: #{person.forenames} #{person.surname}, #{yr}"
       p ""
       
       member = MP.new
