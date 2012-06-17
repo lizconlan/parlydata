@@ -88,7 +88,9 @@ class PersonLoader
         year = "xxxx"
       end
       if record["aka"]
-        person.add_aka(record["aka"])
+        record["aka"].each do |aka|
+          person.add_aka(aka)
+        end
       end
       person.id = "#{person.surname}_#{person.forenames[0..0]}_#{year}"
       person.save

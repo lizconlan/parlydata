@@ -150,6 +150,10 @@ class Person
         forenames = "Doug"
       when "Gregory"
         forenames = "Greg"
+      when "Benedict"
+        forenames = "Ben"
+      when "Ben"
+        forenames = /(?:Benjamin)|(?:Benedict)/
       end
       forenames
     end
