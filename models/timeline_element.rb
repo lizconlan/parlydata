@@ -26,7 +26,7 @@ class GeneralElection < Election
 end
 
 class ByElection < Election
-  has_one :constituency
+  belongs_to :constituency
   
   key :constituency_id, BSON::ObjectId
   key :reason, String
