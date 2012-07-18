@@ -4,12 +4,12 @@ require 'mongo_mapper'
 
 class Constituency
   include MongoMapper::Document
-  many :elections, :in => :election_ids
+  many :election_wins, :in => :election_win_ids
   
   key :name, String
   key :year_created, Integer
   key :year_abolished, Integer
-  key :election_ids, Array
+  key :election_win_ids, Array
   
   def self.find_exact_matches_by_year(name ,year)
     c = Constituency.where(:name => /^#{name}$/i, :year_created.lte => year, :year_abolished.gte => year)

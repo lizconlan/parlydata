@@ -2,17 +2,16 @@ require 'rest-client'
 require 'json'
 require 'date'
 require_relative '../models/timeline_element'
-require_relative '../models/election_result'
+require_relative '../models/election_win'
 require_relative '../models/person'
-require_relative '../models/member'
 
 class GeneralElectionResultsLoader
   def load_from_the_guardian()
     fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2010/results/json", "2010")    
-    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2005/results/json", "2005")
-    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2001/results/json", "2001")
-    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1997/results/json", "1997")
-    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1992/results/json", "1992")
+    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2005/results/json", "2005")
+    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2001/results/json", "2001")
+    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1997/results/json", "1997")
+    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1992/results/json", "1992")
   end
 end
 
@@ -26,7 +25,9 @@ private
     counter = 0
     data["results"]["called-constituencies"].each do |record|
       counter = counter+1
-      result = ElectionResult.new
+      result = ElectionWin.new
+      
+      #associate election with the win
       result.election_id = election.id
       
       constituency_name = record["name"]
@@ -132,24 +133,30 @@ private
       p "found: #{person.forenames} #{person.surname}, #{yr}"
       p ""
       
-      member = MP.new
-      member.person_id = person.id
-      member.election_id = election.id
-      member.id = "#{person.surname}_#{person.forenames.gsub(" ","-")}_#{year}"
-      member.save
-      result.member_ids << member.id unless result.member_ids.include?(member.id)
-      person.member_ids << member.id unless person.member_ids.include?(member.id)
-      person.save
+      #associate the win with a person
+      result.person_ids << person.id unless result.person_ids.include?(person.id)
       
       #monkeypatch discrepancies in Guardian data
       constituency_name = monkeypatch_data_pre_2005(constituency_name) if year.to_i < 2005
       constituency_name = monkeypatch_data_1992(constituency_name) if year.to_i == 1992
       
-      constituency = Constituency.find_constituency(constituency_name, year.to_i)
-      result.constituency_id = constituency.first.id
+      constituency = Constituency.find_constituency(constituency_name, year.to_i).first
+      result.constituency_id = constituency.id
       
       result.party = record["result"]["winning-mp"]["party"]["name"]
       result.save
+      
+      #associate the win with the election
+      election.election_win_ids << result.id unless election.election_win_ids.include?(result.id)
+      election.save
+      
+      #associate the person with the win
+      person.election_win_ids << result.id unless person.election_win_ids.include?(result.id)
+      person.save
+      
+      #associate the constituency with the win
+      constituency.election_win_ids << result.id unless constituency.election_win_ids.include?(result.id)
+      constituency.save
     end
   end
 

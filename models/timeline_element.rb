@@ -1,5 +1,6 @@
 require 'mongo_mapper'
-require_relative 'election_result'
+require_relative 'election_win'
+require_relative 'constituency'
 
 class TimelineElement
   include MongoMapper::Document
@@ -16,9 +17,9 @@ class RegnalYear < TimelineElement
 end
 
 class Election < TimelineElement
-  has_many :election_results
+  many :election_wins, :in => :election_win_ids
   
-  key :election_result_ids, Array
+  key :election_win_ids, Array
 end
 
 class GeneralElection < Election
