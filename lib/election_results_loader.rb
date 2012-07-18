@@ -8,12 +8,11 @@ require_relative '../models/member'
 
 class GeneralElectionResultsLoader
   def load_from_the_guardian()
-    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2010/results/json", "2010")
-    
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2005/results/json", "2005")
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2001/results/json", "2001")
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1997/results/json", "1997")
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1992/results/json", "1992")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2010/results/json", "2010")    
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2005/results/json", "2005")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2001/results/json", "2001")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1997/results/json", "1997")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1992/results/json", "1992")
   end
 end
 
@@ -53,13 +52,12 @@ private
       
       ## reformat as case statement when finished?
       if name == "Ian Paisley" 
-        if year > 2009
+        if year.to_i > 2009
           person = [Person.find("Paisley_I_1966")]
         else
-          person = [Person.find("I_Paisley_I_1926")]
+          person = [Person.find("Paisley_I_1926")]
         end
-      end
-      if name == "Anthony Wright" and constituency_name == "Great Yarmouth"
+      elsif name == "Anthony Wright" and constituency_name == "Great Yarmouth"
         person = [Person.find("Wright_T_1954")]
       elsif name == "Tony Wright" and (constituency_name == "Cannock Chase" or constituency_name == "Cannock and Burntwood")
         person = [Person.find("Wright_T_1948")]
@@ -140,6 +138,8 @@ private
       member.id = "#{person.surname}_#{person.forenames.gsub(" ","-")}_#{year}"
       member.save
       result.member_ids << member.id unless result.member_ids.include?(member.id)
+      person.member_ids << member.id unless person.member_ids.include?(member.id)
+      person.save
       
       #monkeypatch discrepancies in Guardian data
       constituency_name = monkeypatch_data_pre_2005(constituency_name) if year.to_i < 2005
