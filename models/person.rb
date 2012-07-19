@@ -65,11 +65,11 @@ class Person
     
     #forename shortenings, lengthenings, etc...
     forenames = forename_variations(forenames)
-    persons = find_people(name, /^#{surname}$/i, /#{forenames}/)
+    persons = find_people(name, /^#{surname}$/i, /#{forenames}/i)
     
     if persons.empty? and alt_surname
       forenames = forename_variations(alt_forenames)
-      persons = find_people(name, /^#{alt_surname}$/i, /#{forenames}/)
+      persons = find_people(name, /^#{alt_surname}$/i, /#{forenames}/i)
     end
     
     persons
