@@ -8,6 +8,8 @@ MongoMapper.connect(env)
 
 require_relative "models/constituency"
 require_relative "models/timeline_element"
+require_relative "models/person"
+require_relative "models/election_win"
 
 before do
   if request.port != 80
@@ -31,7 +33,7 @@ get "/api" do
   File.read('public/api/index.html')
 end
 
-get "/api/constituencies/search" do
+get "/api/constituencies/search/?" do
   content_type :json
   name = params[:q]
   year = params[:year]
@@ -104,6 +106,30 @@ get "/api/elections/:id/?" do
     status 404
     %Q|{"message": "Election not found", "type": "error"}|
   end
+end
+
+get "/api/mps/search" do
+  content_type :json
+  name = params[:q]
+  year = params[:year]
+  members = Person.find_all_by_name(name)
+  members.delete_if { |x| x.election_win_ids.empty? }
+  unless members.empty?
+    members_json = []
+    members.each do |member|
+      members_json << {:name => "#{member.forenames} #{member.surname}", :born => "#{member.born}", :died => "#{member.died}", :election_wins => member.election_wins.map {|x| {:type => x.election._type, :constituency_name => x.constituency.name, :party => x.party, :election_date => x.election.start_date}}}
+    end
+    members_json.to_json
+  else
+    status 404
+    %Q|{"message": "Member not found", "type": "error"}|
+  end
+end
+
+get "/api/mps/?" do
+end
+
+get "/api/mps/:id/?" do
 end
 
 
