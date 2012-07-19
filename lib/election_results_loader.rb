@@ -25,19 +25,24 @@ private
     counter = 0
     data["results"]["called-constituencies"].each do |record|
       counter = counter+1
-      result = ElectionWin.new
+      
+      constituency_name = record["name"]
+      #monkeypatch discrepancies in Guardian data
+      constituency_name = monkeypatch_data_pre_2005(constituency_name) if year.to_i < 2005
+      constituency_name = monkeypatch_data_1992(constituency_name) if year.to_i == 1992
+      
+      constituency = Constituency.find_constituency(constituency_name, year.to_i).first
+      
+      result = ElectionWin.find_or_create_by_constituency_id_and_election_id(constituency.id, election.id)
       
       #associate election with the win
       result.election_id = election.id
-      
-      constituency_name = record["name"]
       
       #debug
       p counter
       p "#{constituency_name} - #{record["result"]["winning-mp"]["name"]}"
       
       name = record["result"]["winning-mp"]["name"]
-      name.gsub!("SImon", "Simon")
       name = "Ed Miliband" if name == "Sophie Brodie" #cheers Guardian, cracking one that
       
       #do person/member stuff
@@ -136,14 +141,10 @@ private
       #associate the win with a person
       result.person_ids << person.id unless result.person_ids.include?(person.id)
       
-      #monkeypatch discrepancies in Guardian data
-      constituency_name = monkeypatch_data_pre_2005(constituency_name) if year.to_i < 2005
-      constituency_name = monkeypatch_data_1992(constituency_name) if year.to_i == 1992
-      
-      constituency = Constituency.find_constituency(constituency_name, year.to_i).first
       result.constituency_id = constituency.id
       
       result.party = record["result"]["winning-mp"]["party"]["name"]
+      result.party = "Labour" if name == "Ed Miliband" and year.to_i == 2010 #hai again Guardian
       result.save
       
       #associate the win with the election
