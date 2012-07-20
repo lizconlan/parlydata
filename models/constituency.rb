@@ -128,7 +128,8 @@ class Constituency
     if include_wins
       wins = []
       election_wins.each do |win|
-        wins << {:election_id => win.election.id, :mps => {:person_id => win.person.id, :name => "#{win.person.forenames} #{win.person.surname}".squeeze(" "), :party => win.party}}
+        person = win.person
+        wins << {:election_id => win.election.id, :mps => {:person_id => win.person_id, :name => "#{person.forenames} #{person.surname}".squeeze(" "), :party => win.party}}
       end
       hash[:wins] = wins unless wins.empty?
     end

@@ -8,6 +8,8 @@ class ElectionWin
   
   key :election_id, BSON::ObjectId
   key :constituency_id, BSON::ObjectId
+  key :constituency_name, String
   key :party, String
   key :person_id, BSON::ObjectId
+  key :person_name, String
 end

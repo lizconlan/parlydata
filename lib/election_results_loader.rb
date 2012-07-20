@@ -140,8 +140,11 @@ private
       
       #associate the win with a person
       result.person_id = person.id
+      result.person_name = "#{person.forenames} #{person.surname}".squeeze(" ")
       
+      #associate the win with a constituency
       result.constituency_id = constituency.id
+      result.constituency_name = constituency.name
       
       result.party = record["result"]["winning-mp"]["party"]["name"]
       result.party = "Labour" if name == "Ed Miliband" and year.to_i == 2010 #hai again Guardian
