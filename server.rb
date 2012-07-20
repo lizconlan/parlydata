@@ -58,21 +58,31 @@ end
 get "/api/constituencies/?" do
   content_type :json
   start = params[:start]
+  if params[:include_wins] == "true" or params[:include_wins] == "1"
+    include_wins = true
+  else
+    include_wins = false
+  end
   start = start.to_i
   start = 1 if start < 1
   if start > Constituency.count
     "[]"
   else
-    Constituency.all(:offset => start-1, :limit => 10)
+    Constituency.all(:offset => start-1, :limit => 10).map{|x| x.to_hash(include_wins)}.to_json
   end
 end
 
 get "/api/constituencies/:id/?" do
   content_type :json
   id = params[:id]
+  if params[:include_wins] == "true" or params[:include_wins] == "1"
+    include_wins = true
+  else
+    include_wins = false
+  end
   constituency = Constituency.find(id)
   if constituency
-    constituency.to_json
+    constituency.to_hash(include_wins).to_json
   else
     status 404
     %Q|{"message": "Constituency not found", "type": "error"}|
@@ -155,6 +165,14 @@ get "/api/constituencies.json" do
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
+              },
+              {
+                "name":"include_wins",
+                "description":"Optionally return the election result data (accepts true or 1)",
+                "dataType":"string",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
               }
             ],
             "httpMethod":"GET",
@@ -180,6 +198,14 @@ get "/api/constituencies.json" do
                 "required":true,
                 "allowMultiple":false,
                 "paramType":"path"
+              },
+              {
+                "name":"include_wins",
+                "description":"Optionally return the election result data (accepts true or 1)",
+                "dataType":"string",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
               }
             ],
             "httpMethod":"GET",
