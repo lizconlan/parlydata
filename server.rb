@@ -114,9 +114,22 @@ end
 get "/api/elections/:id/?" do
   content_type :json
   id = params[:id]
+  if params[:include_wins] == "true" or params[:include_wins] == "1"
+    include_wins = true
+  else
+    include_wins = false
+  end
   election = Election.find(id)
   if election
-    election.to_json
+    hash = {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}
+    wins = []
+    if include_wins
+      election.election_wins.each do |win|
+        wins << {:id => win.id, :mp => {:id => win.person_id, :name => win.person_name, :party => win.party}, :constituency_id => win.constituency_id, :constituency_name => win.constituency_name}
+      end
+      hash[:wins] = wins unless wins.empty?
+    end
+    hash.to_json
   else
     status 404
     %Q|{"message": "Election not found", "type": "error"}|
@@ -326,6 +339,14 @@ get "/api/elections.json" do
                 "required":true,
                 "allowMultiple":false,
                 "paramType":"path"
+              },
+              {
+                "name":"include_wins",
+                "description":"Optionally return the election result data (accepts true or 1)",
+                "dataType":"string",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
               }
             ],
             "httpMethod":"GET",
