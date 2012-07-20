@@ -139,7 +139,7 @@ private
       p ""
       
       #associate the win with a person
-      result.person_ids << person.id unless result.person_ids.include?(person.id)
+      result.person_id = person.id
       
       result.constituency_id = constituency.id
       
