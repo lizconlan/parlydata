@@ -122,6 +122,19 @@ class Constituency
     name.downcase().gsub(" ","-").gsub('(',"").gsub(')',"")  
   end
   
+  def to_hash(include_wins=false)
+    hash = {:id => id, :name => name, :year_created => year_created}
+    hash[:year_abolished] = year_abolished if year_abolished
+    if include_wins
+      wins = []
+      election_wins.each do |win|
+        wins << {:election_id => win.election.id, :mps => win.people.map {|x| "#{x.forenames} #{x.surname}".squeeze(" ")}, :party => win.party}
+      end
+      hash[:wins] = wins unless wins.empty?
+    end
+    hash
+  end
+  
   private
     def self.find_exact_or_fuzzy_match(name, year)
       list = Constituency.find_exact_matches_by_year(name, year)

@@ -37,13 +37,18 @@ get "/api/constituencies/search/?" do
   content_type :json
   name = params[:q]
   year = params[:year]
+  if params[:include_wins] == "true" or params[:include_wins] == "1"
+    include_wins = true
+  else
+    include_wins = false
+  end  
   if name and year
     constituencies = Constituency.find_constituency(name, year.to_i)
   elsif name
     constituencies = Constituency.find_all_by_name(/#{name}/i)
   end
   unless constituencies.empty?
-    constituencies.to_json
+    constituencies.map{|x| x.to_hash(include_wins)}.to_json
   else
     status 404
     %Q|{"message": "Constituency not found", "type": "error"}|
@@ -58,7 +63,7 @@ get "/api/constituencies/?" do
   if start > Constituency.count
     "[]"
   else
-    Constituency.all(:offset => start-1, :limit => 10).to_json
+    Constituency.all(:offset => start-1, :limit => 10)
   end
 end
 
@@ -205,6 +210,14 @@ get "/api/constituencies.json" do
                 "name":"year",
                 "description":"Year",
                 "dataType":"int",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              },
+              {
+                "name":"include_wins",
+                "description":"Optionally return the election result data (accepts true or 1)",
+                "dataType":"string",
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
