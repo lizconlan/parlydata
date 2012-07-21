@@ -41,11 +41,15 @@ get "/api/constituencies/search/?" do
     include_wins = true
   else
     include_wins = false
-  end  
+  end
+  start = params[:start]
+  start = start.to_i
+  start = 1 if start < 1
+  
   if name and year
-    constituencies = Constituency.find_constituency(name, year.to_i)
+    constituencies = Constituency.find_constituency(name, year.to_i, :offset => start-1, :limit => 10)
   elsif name
-    constituencies = Constituency.find_all_by_name(/#{name}/i)
+    constituencies = Constituency.find_all_by_name(/#{name}/i, :offset => start-1, :limit => 10)
   end
   unless constituencies.empty?
     constituencies.map{|x| x.to_hash(include_wins)}.to_json
@@ -98,14 +102,14 @@ get "/api/elections/?" do
   
   case type
   when "ByElection"
-    elections = ByElection.all(:offset => start-1, :limit => 10).to_json
+    elections = ByElection.all(:offset => start-1, :limit => 10).map{|election| {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}}.to_json
   when "GeneralElection"
-    elections = GeneralElection.all(:offset => start-1, :limit => 10).to_json
+    elections = GeneralElection.all(:offset => start-1, :limit => 10).map{|election| {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}}.to_json
   else
-    elections = Election.all(:offset => start-1, :limit => 10).to_json
+    elections = Election.all(:offset => start-1, :limit => 10).map{|election| {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}}.to_json
   end
   if elections == "null"
-      "[]"
+    "[]"
   else
     elections
   end
@@ -119,6 +123,7 @@ get "/api/elections/:id/?" do
   else
     include_wins = false
   end
+  
   election = Election.find(id)
   if election
     hash = {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}
@@ -257,6 +262,14 @@ get "/api/constituencies.json" do
                 "name":"include_wins",
                 "description":"Optionally return the election result data (accepts true or 1)",
                 "dataType":"string",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              },
+              {
+                "name":"start",
+                "description":"Offset parameter for pagination",
+                "dataType":"integer",
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
