@@ -145,12 +145,22 @@ get "/api/mps/search" do
   content_type :json
   name = params[:q]
   year = params[:year]
+  if params[:include_wins] == "true" or params[:include_wins] == "1"
+    include_wins = true
+  else
+    include_wins = false
+  end
+  
   members = Person.find_all_by_name(name)
   members.delete_if { |x| x.election_win_ids.empty? }
   unless members.empty?
     members_json = []
     members.each do |member|
-      members_json << {:name => "#{member.forenames} #{member.surname}", :born => "#{member.born}", :died => "#{member.died}", :election_wins => member.election_wins.map {|x| {:type => x.election._type, :constituency_name => x.constituency.name, :party => x.party, :election_date => x.election.start_date}}}
+      hash = {:id => "#{member.id}", :name => "#{member.forenames} #{member.surname}", :born => "#{member.born}", :died => "#{member.died}"}
+      if include_wins
+        hash[:election_wins] = member.election_wins.map {|x| {:type => x.election._type, :constituency_name => x.constituency.name, :party => x.party, :election_date => x.election.start_date}}
+      end
+      members_json << hash
     end
     members_json.to_json
   else
