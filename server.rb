@@ -296,16 +296,6 @@ get "/api/constituencies.json" do
           "wins":{"type":"array","items":{"$ref":"election", "mps": {"type":"array", "items":{"$ref":"mp", "name":{"type":"string"}, "party":{"type":"string"}}}}}
         },
         "id":"constituency"
-      },
-      "Election":{
-        "properties":{
-          "id":{"type":"string"},
-          "type":{"type":"string"},
-          "start_date":{"type":"string"},
-          "end_date":{"type":"string"},
-          "wins":{"type":"array","items":{"mps":{"$ref":"mp","name":{"type":"string"},"party":{"type":"string"}},"$ref":"constituency","constituency_name":{"type":"string"}}}
-        },
-        "id":"election"
       }
     },
     "basePath":"#{@base_path}",
@@ -386,12 +376,11 @@ get "/api/elections.json" do
     "models": {
       "Election":{
         "properties":{
-          "_type": {"type":"string"},
-          "constituency_id":{"type":"string","$ref":"constituency"},
-          "end_date": {"type":"string"},
           "id":{"type":"string"},
-          "reason":{"type":"string"},
-          "start_date":{"type":"string"}
+          "type":{"type":"string"},
+          "start_date":{"type":"string"},
+          "end_date":{"type":"string"},
+          "wins":{"type":"array","items":{"mps":{"$ref":"mp","name":{"type":"string"},"party":{"type":"string"}},"$ref":"constituency","constituency_name":{"type":"string"}}}
         },
         "id":"election"
       }
