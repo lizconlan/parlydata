@@ -130,7 +130,7 @@ get "/api/elections/:id/?" do
     wins = []
     if include_wins
       election.election_wins.each do |win|
-        wins << {:id => win.id, :mp => {:id => win.person_id, :name => win.person_name, :party => win.party}, :constituency_id => win.constituency_id, :constituency_name => win.constituency_name}
+        wins << {:mp => {:id => win.person_id, :name => win.person_name, :party => win.party}, :constituency_id => win.constituency_id, :constituency_name => win.constituency_name}
       end
       hash[:wins] = wins unless wins.empty?
     end
@@ -303,7 +303,7 @@ get "/api/constituencies.json" do
           "type":{"type":"string"},
           "start_date":{"type":"string"},
           "end_date":{"type":"string"},
-          "wins":{"type":"array","items":{"id":{"type":"string"},"mps":{"$ref":"mp","name":{"type":"string"},"party":{"type":"string"}},"$ref":"constituency","constituency_name":{"type":"string"}}}
+          "wins":{"type":"array","items":{"mps":{"$ref":"mp","name":{"type":"string"},"party":{"type":"string"}},"$ref":"constituency","constituency_name":{"type":"string"}}}
         },
         "id":"election"
       }
