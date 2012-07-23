@@ -169,7 +169,11 @@ end
 #Swagger things
 get "/api/constituencies.json" do
   #json file for Swagger
-  %|{"apis":[
+  %|{"apiVersion": "1.0",
+    "swaggerVersion": "1.0",
+    "basePath": "#{@base_path}",
+    "resourcePath": "/constituencies",
+    "apis":[
       {
         "path":"/constituencies",
         "description":"List of constituencies",
@@ -189,6 +193,10 @@ get "/api/constituencies.json" do
                 "description":"Optionally return the election result data (accepts true or 1)",
                 "dataType":"string",
                 "required":false,
+                "allowableValues": {
+                    "valueType": "LIST",
+                    "values": ["1", "true"]
+                },
                 "allowMultiple":false,
                 "paramType":"query"
               }
@@ -222,6 +230,10 @@ get "/api/constituencies.json" do
                 "description":"Optionally return the election result data (accepts true or 1)",
                 "dataType":"string",
                 "required":false,
+                "allowableValues": {
+                    "valueType": "LIST",
+                    "values": ["1", "true"]
+                },
                 "allowMultiple":false,
                 "paramType":"query"
               }
@@ -262,6 +274,10 @@ get "/api/constituencies.json" do
                 "name":"include_wins",
                 "description":"Optionally return the election result data (accepts true or 1)",
                 "dataType":"string",
+                "allowableValues": {
+                    "valueType": "LIST",
+                    "values": ["1", "true"]
+                },
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
@@ -297,15 +313,15 @@ get "/api/constituencies.json" do
         },
         "id":"constituency"
       }
-    },
-    "basePath":"#{@base_path}",
-    "swaggerVersion":"1.1-SHAPSHOT.121026",
-    "apiVersion":"1"}|
+    }}|
 end
 
 get "/api/elections.json" do
   #json file for Swagger
-  %|{"resourcePath":"/elections",
+  %|{"apiVersion": "1.0",
+    "swaggerVersion": "1.0",
+    "basePath": "#{@base_path}",
+    "resourcePath":"/elections",
     "apis":[
       {
         "path":"/elections",
@@ -325,6 +341,10 @@ get "/api/elections.json" do
                 "name":"type",
                 "description":"Optional election type to filter by - ByElection or GeneralElection",
                 "dataType":"string",
+                "allowableValues": {
+                    "valueType": "LIST",
+                    "values": ["GeneralElection", "ByElection"]
+                },
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
@@ -358,6 +378,10 @@ get "/api/elections.json" do
                 "name":"include_wins",
                 "description":"Optionally return the election result data (accepts true or 1)",
                 "dataType":"string",
+                "allowableValues": {
+                    "valueType": "LIST",
+                    "values": ["1", "true"]
+                },
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
@@ -385,15 +409,15 @@ get "/api/elections.json" do
         },
         "id":"election"
       }
-    },
-    "basePath":"#{@base_path}",
-    "swaggerVersion":"1.1-SHAPSHOT.121026",
-    "apiVersion":"1"}|
+    }}|
 end
 
 get "/api/mps.json" do
   #json file for Swagger
-  %|{"resourcePath":"/mps",
+  %|{"apiVersion": "1.0",
+    "swaggerVersion": "1.0",
+    "basePath": "#{@base_path}",
+    "resourcePath":"/mps",
     "apis":[
       {
         "path":"/mps",
@@ -413,6 +437,10 @@ get "/api/mps.json" do
                 "name":"include_wins",
                 "description":"Optionally return the election result data (accepts true or 1)",
                 "dataType":"string",
+                "allowableValues": {
+                    "valueType": "LIST",
+                    "values": ["1", "true"]
+                },
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
@@ -446,6 +474,10 @@ get "/api/mps.json" do
                 "name":"include_wins",
                 "description":"Optionally return the election result data (accepts true or 1)",
                 "dataType":"string",
+                "allowableValues": {
+                    "valueType": "LIST",
+                    "values": ["1", "true"]
+                },
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
@@ -487,6 +519,10 @@ get "/api/mps.json" do
                 "name":"include_wins",
                 "description":"Optionally return the election result data (accepts true or 1)",
                 "dataType":"string",
+                "allowableValues": {
+                    "valueType": "LIST",
+                    "values": ["1", "true"]
+                },
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
@@ -522,13 +558,11 @@ get "/api/mps.json" do
         },
         "id":"mp"
       }
-    },
-    "basePath":"#{@base_path}",
-    "swaggerVersion":"1.1-SHAPSHOT.121026",
-    "apiVersion":"1"}|
+    }
+  }|
 end
 
 get "/api/resources.json" do
   #resources.json for Swagger
-  %|{"apis":[{"path":"/constituencies.{format}","description":"Operations about constituencies"},{"path":"/mps.{format}","description":"Operations about MPs"},{"path":"/elections.{format}","description":"Operations about elections"}],"basePath":"#{@base_path}","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
+  %|{"apiVersion":"1","swaggerVersion":"1.0","basePath":"#{@base_path}","apis":[{"path":"/constituencies.{format}","description":"Operations about constituencies"}, {"path":"/elections.{format}","description":"Operations about elections"}, {"path":"/mps.{format}","description":"Operations about MPs"}]}|
 end
