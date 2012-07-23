@@ -305,7 +305,8 @@ end
 
 get "/api/elections.json" do
   #json file for Swagger
-  %|{"apis":[
+  %|{"resourcePath":"/elections",
+    "apis":[
       {
         "path":"/elections",
         "description":"List of elections",
@@ -390,7 +391,144 @@ get "/api/elections.json" do
     "apiVersion":"1"}|
 end
 
+get "/api/mps.json" do
+  #json file for Swagger
+  %|{"resourcePath":"/mps",
+    "apis":[
+      {
+        "path":"/mps",
+        "description":"List of MPs",
+        "operations":[
+          {
+            "parameters":[
+              {
+                "name":"start",
+                "description":"Offset parameter for pagination",
+                "dataType":"integer",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              },
+              {
+                "name":"include_wins",
+                "description":"Optionally return the election result data (accepts true or 1)",
+                "dataType":"string",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              }
+            ],
+            "httpMethod":"GET",
+            "notes":"Returns a list of MPs, 10 at a time",
+            "responseTypeInternal":"com.parlydata.api.model.MP",
+            "errorResponses":[],
+            "nickname":"getMPs",
+            "responseClass":"List[mp]",
+            "summary":"MP list"
+          }
+        ]
+      },
+      {
+        "path":"/mps/{mpID}",
+        "description":"MP detail",
+        "operations":[
+          {
+            "parameters":[
+              {
+                "name":"mpID",
+                "description":"ID of the MP to be fetched",
+                "dataType":"string",
+                "required":true,
+                "allowMultiple":false,
+                "paramType":"path"
+              },
+              {
+                "name":"include_wins",
+                "description":"Optionally return the election result data (accepts true or 1)",
+                "dataType":"string",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              }
+            ],
+            "httpMethod":"GET",
+            "notes":"Returns an individual MP record, or a 404 error if no match is found",
+            "responseTypeInternal":"com.parlydata.api.model.MP",
+            "errorResponses":[{"reason":"MP not found","code":404}],
+            "nickname":"getMP",
+            "responseClass":"mp",
+            "summary":"Get MP by ID"
+          }
+        ]
+      },
+      {
+        "path":"/mps/search",
+        "description":"MP search",
+        "operations":[
+          {
+            "parameters":[
+              {
+                "name":"q",
+                "description":"Search query (For best results, use a name)",
+                "dataType":"string",
+                "required":true,
+                "allowMultiple":false,
+                "paramType":"query"
+              },
+              {
+                "name":"year",
+                "description":"Year",
+                "dataType":"int",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              },
+              {
+                "name":"include_wins",
+                "description":"Optionally return the election result data (accepts true or 1)",
+                "dataType":"string",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              },
+              {
+                "name":"start",
+                "description":"Offset parameter for pagination",
+                "dataType":"integer",
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              }
+            ],
+            "httpMethod":"GET",
+            "notes":"Returns a list of matching MPs or a 404 error if no matches are found",
+            "responseTypeInternal":"com.parlydata.api.model.MP",
+            "errorResponses":[{"reason":"MP not found","code":404}],
+            "nickname":"getMPSearch",
+            "responseClass":"List[mp]",
+            "summary":"MP search"
+          }
+        ]
+      }
+    ],
+    "models": {
+      "MP":{
+        "properties":{
+          "id":{"type":"string"},
+          "name":{"type":"string"},
+          "born":{"type":"string"},
+          "died":{"type":"string"},
+          "election_wins":{"type":"array","items":{"$ref":"election", "type":{"type":"string"},"constituency":{"type":"string"},"party":{"type":"string"},"election_date":{"type":"string"}}}
+        },
+        "id":"mp"
+      }
+    },
+    "basePath":"#{@base_path}",
+    "swaggerVersion":"1.1-SHAPSHOT.121026",
+    "apiVersion":"1"}|
+end
+
 get "/api/resources.json" do
   #resources.json for Swagger
-  %|{"apis":[{"path":"/constituencies.{format}","description":"Operations about constituencies"},{"path":"/elections.{format}","description":"Operations about elections"}],"basePath":"#{@base_path}","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
+  %|{"apis":[{"path":"/constituencies.{format}","description":"Operations about constituencies"},{"path":"/mps.{format}","description":"Operations about MPs"},{"path":"/elections.{format}","description":"Operations about elections"}],"basePath":"#{@base_path}","swaggerVersion":"1.1-SHAPSHOT.121026","apiVersion":"1"}|
 end
