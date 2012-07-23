@@ -289,13 +289,23 @@ get "/api/constituencies.json" do
     "models": {
       "Constituency":{
         "properties":{
-          "election_ids":{"type":"array","items":{"$ref":"election"}},
           "id":{"type":"string"},
           "name":{"type":"string"},
+          "year_created":{"type":"int"},
           "year_abolished":{"type":"int"},
-          "year_created":{"type":"int"}
+          "wins":{"type":"array","items":{"$ref":"election", "mps": {"type":"array", "items":{"$ref":"mp", "name":{"type":"string"}, "party":{"type":"string"}}}}}
         },
         "id":"constituency"
+      },
+      "Election":{
+        "properties":{
+          "id":{"type":"string"},
+          "type":{"type":"string"},
+          "start_date":{"type":"string"},
+          "end_date":{"type":"string"},
+          "wins":{"type":"array","items":{"id":{"type":"string"},"mps":{"$ref":"mp","name":{"type":"string"},"party":{"type":"string"}},"$ref":"constituency","constituency_name":{"type":"string"}}}
+        },
+        "id":"election"
       }
     },
     "basePath":"#{@base_path}",
