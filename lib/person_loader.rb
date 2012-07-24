@@ -61,6 +61,7 @@ class PersonLoader
         person.add_aka("Dame Mary Elaine Kellett-Bowman")
       end
       
+      person.name = "#{record["forenames"]} #{record["surname"]}".squeeze(" ")
       person.url = record["url"]
       if person.born and person.born.year > 1900 #restrict the dataset to recent times
         born = person.born.year.to_s
@@ -79,6 +80,7 @@ class PersonLoader
       person = Person.new
       person.surname = record["surname"]
       person.forenames = record["forenames"]
+      person.name = "#{record["forenames"]} #{record["surname"]}".squeeze(" ")
       person.title = record["title"] if record["title"]
       person.born = record["born"]
       person.died = record["died"] if record["died"]
@@ -92,7 +94,7 @@ class PersonLoader
           person.add_aka(aka)
         end
       end
-      person.id = "#{person.surname}_#{person.forenames[0..0]}_#{year}"
+      person.id = "#{person.surname}_#{person.forenames[0..0]}_#{year}".gsub(" ", "_")
       person.save
     end
   end

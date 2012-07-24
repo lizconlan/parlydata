@@ -120,7 +120,7 @@ private
       elsif name == "Jeremy Browne" and constituency_name =~ /^Taunton/
         person = [Person.find("Browne_J_1970")]
       else
-        person = Person.find_all_by_name(name)
+        person = Person.find_best_matches(name)
       end
       
       if person.size > 1

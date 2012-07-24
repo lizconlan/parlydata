@@ -9,6 +9,7 @@ class Person
   key :title, String
   key :forenames, String
   key :surname, String
+  key :name, String
   key :aka, Array
   key :born, Date
   key :died, Date
@@ -19,7 +20,7 @@ class Person
     aka << name unless aka.include?(name)
   end
   
-  def self.find_all_by_name(name, year=nil)
+  def self.find_best_matches(name, year=nil)
     parts = name.split
     surname = parts.pop
     forenames = parts.join(" ")

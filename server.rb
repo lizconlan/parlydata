@@ -145,14 +145,17 @@ get "/api/mps/search" do
   content_type :json
   name = params[:q]
   year = params[:year]
+  year = nil if year.to_i < 1
+  start = params[:start]
+  start = start.to_i
+  start = 0 if start < 2  
   if params[:include_wins] == "true" or params[:include_wins] == "1"
     include_wins = true
   else
     include_wins = false
   end
   
-  members = Person.find_all_by_name(name)
-  members.delete_if { |x| x.election_win_ids.empty? }
+  members = Person.find_all_by_name(/#{name}/i, :election_win_ids.ne => [], :limit => 10, :skip => start)
   unless members.empty?
     members_json = []
     members.each do |member|
@@ -570,6 +573,14 @@ get "/api/mps.json" do
                     "valueType": "LIST",
                     "values": ["1", "true"]
                 },
+                "required":false,
+                "allowMultiple":false,
+                "paramType":"query"
+              },
+              {
+                "name":"start",
+                "description":"Offset parameter for pagination",
+                "dataType":"integer",
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
