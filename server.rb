@@ -173,6 +173,24 @@ get "/api/mps/?" do
 end
 
 get "/api/mps/:id/?" do
+  content_type :json
+  id = params[:id]
+  if params[:include_wins] == "true" or params[:include_wins] == "1"
+    include_wins = true
+  else
+    include_wins = false
+  end
+  member = Person.find(id)
+  if member
+    hash = {:id => "#{member.id}", :name => "#{member.forenames} #{member.surname}", :born => "#{member.born}", :died => "#{member.died}"}
+    if include_wins
+      hash[:election_wins] = member.election_wins.map {|x| {:type => x.election._type, :constituency_name => x.constituency.name, :party => x.party, :election_date => x.election.start_date}}
+    end
+    hash.to_json
+  else
+    status 404
+    %Q|{"message": "MP not found", "type": "error"}|
+  end
 end
 
 
@@ -533,14 +551,6 @@ get "/api/mps.json" do
                     "valueType": "LIST",
                     "values": ["1", "true"]
                 },
-                "required":false,
-                "allowMultiple":false,
-                "paramType":"query"
-              },
-              {
-                "name":"start",
-                "description":"Offset parameter for pagination",
-                "dataType":"integer",
                 "required":false,
                 "allowMultiple":false,
                 "paramType":"query"
