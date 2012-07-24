@@ -79,7 +79,10 @@ class Person
   private
     def self.find_people(name, surname, forenames, year=nil)
       persons = Person.find_all_by_surname_and_forenames(surname, forenames)
-      persons += Person.find_all_by_aka(name)
+      others = Person.find_all_by_aka(name)
+      others.each do |person|
+        persons << person unless persons.include?(person)
+      end
       persons
     end
     

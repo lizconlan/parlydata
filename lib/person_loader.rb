@@ -32,6 +32,10 @@ class PersonLoader
         person.born = "1930-10-12" #some sources say 1928, Who Was Who says 1930 so switching to that
       end
       
+      if person.forenames == "John" and person.surname == "Austin-Walker"
+        person.add_aka("John Austin-Walker")
+        person.surname = "Austin"
+      end
       if person.forenames == "Helen" and person.surname == "Brinton"
         person.surname = "Clark"
         person.add_aka("Helen Brinton")
@@ -61,7 +65,8 @@ class PersonLoader
         person.add_aka("Dame Mary Elaine Kellett-Bowman")
       end
       
-      person.name = "#{record["forenames"]} #{record["surname"]}".squeeze(" ")
+      person.name = "#{person.forenames} #{person.surname}".squeeze(" ")
+      person.add_aka(person.name)
       person.url = record["url"]
       if person.born and person.born.year > 1900 #restrict the dataset to recent times
         born = person.born.year.to_s
@@ -94,6 +99,7 @@ class PersonLoader
           person.add_aka(aka)
         end
       end
+      person.add_aka(person.name)
       person.id = "#{person.surname}_#{person.forenames[0..0]}_#{year}".gsub(" ", "_")
       person.save
     end
