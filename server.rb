@@ -514,7 +514,7 @@ get "/api/mps.json" do
             "parameters":[
               {
                 "name":"mpID",
-                "description":"ID of the MP to be fetched",
+                "description":"ID of the MP record to be fetched",
                 "dataType":"string",
                 "required":true,
                 "allowMultiple":false,
