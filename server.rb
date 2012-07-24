@@ -155,7 +155,11 @@ get "/api/mps/search" do
     include_wins = false
   end
   
-  members = Person.find_all_by_name(/#{name}/i, :election_win_ids.ne => [], :limit => 10, :skip => start)
+  if year
+    members = Person.find_all_by_aka(/#{name}/i, "$or" => [{:died => nil},{:died => {"$gte" => "#{year}-01-01".to_time}}], :born.lte => "#{year}-01-01".to_time, :election_win_ids.ne => [], :limit => 10, :skip => start)
+  else
+    members = Person.find_all_by_aka(/#{name}/i, :election_win_ids.ne => [], :limit => 10, :skip => start)
+  end
   unless members.empty?
     members_json = []
     members.each do |member|
