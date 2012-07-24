@@ -12,17 +12,13 @@ class Constituency
   key :election_win_ids, Array
   
   def self.find_exact_matches_by_year(name ,year)
-    c = Constituency.where(:name => /^#{name}$/i, :year_created.lte => year, :year_abolished.gte => year)
+    c = Constituency.where(:name => /^#{name}$/i, :year_created.lte => year, "$or" => [{:year_abolished => {"$gte" => year}}, {:year_abolished => {"$exists" => false}}])
     list = c.all
-    c = Constituency.where(:name => /^#{name}$/i, :year_created.lte => year, :year_abolished.exists => false)
-    list += c.all
   end
   
   def self.find_fuzzy_matches_by_year(name, year)
-    c = Constituency.where(:name => /#{name}/i, :year_created.lte => year, :year_abolished.gte => year)
+    c = Constituency.where(:name => /#{name}/i, :year_created.lte => year, "$or" => [{:year_abolished => {"$gte" => year}}, {:year_abolished => {"$exists" => false}}])
     list = c.all
-    c = Constituency.where(:name => /#{name}/i, :year_created.lte => year, :year_abolished.exists => false)
-    list += c.all
   end
   
   def self.find_constituency(name, year, replace_spaces=nil)
