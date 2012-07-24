@@ -19,6 +19,7 @@ class ConstituencyLoader
       if constituency.name =~ /(.*), The/
         constituency.name = "The #{$1.strip}"
       end
+      constituency.name = "Lindsey East" if constituency.name == "Linsey East"
       constituency.year_created = record["created"]
       if record["abolished"]
         constituency.year_abolished = record["abolished"]
