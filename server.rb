@@ -170,6 +170,25 @@ get "/api/mps/search" do
 end
 
 get "/api/mps/?" do
+  start = params[:start]
+  start = start.to_i
+  start = 0 if start < 2
+  if params[:include_wins] == "true" or params[:include_wins] == "1"
+    include_wins = true
+  else
+    include_wins = false
+  end
+  
+  members = Person.where(:election_win_ids.ne => []).limit(10).skip(start)
+  members_hash = []
+  members.each do |member|
+    hash = {:id => "#{member.id}", :name => "#{member.forenames} #{member.surname}", :born => "#{member.born}", :died => "#{member.died}"}
+    if include_wins
+      hash[:election_wins] = member.election_wins.map {|x| {:type => x.election._type, :constituency_name => x.constituency.name, :party => x.party, :election_date => x.election.start_date}}
+    end
+    members_hash << hash
+  end
+  members_hash.to_json
 end
 
 get "/api/mps/:id/?" do
