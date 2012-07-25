@@ -37,6 +37,7 @@ get "/api/constituencies/search/?" do
   content_type :json
   name = params[:q]
   year = params[:year]
+  count = 0
   if params[:include_wins] == "true" or params[:include_wins] == "1"
     include_wins = true
   else
@@ -48,11 +49,13 @@ get "/api/constituencies/search/?" do
   
   if name and year
     constituencies = Constituency.find_constituency(name, year.to_i, :offset => start-1, :limit => 10)
+    count = Constituency.find_constituency(name, year.to_i).count
   elsif name
     constituencies = Constituency.find_all_by_name(/#{name}/i, :offset => start-1, :limit => 10)
+    count = Constituency.find_all_by_name(/#{name}/i).count
   end
   unless constituencies.empty?
-    constituencies.map{|x| x.to_hash(include_wins)}.to_json
+    {"count" => count, :constituencies => constituencies.map{|x| x.to_hash(include_wins)}}.to_json
   else
     status 404
     %Q|{"message": "Constituency not found", "type": "error"}|
@@ -69,10 +72,11 @@ get "/api/constituencies/?" do
   end
   start = start.to_i
   start = 1 if start < 1
-  if start > Constituency.count
+  count = Constituency.count
+  if start > count
     "[]"
   else
-    Constituency.all(:offset => start-1, :limit => 10).map{|x| x.to_hash(include_wins)}.to_json
+    {"count" => count, :constituencies => Constituency.all(:offset => start-1, :limit => 10).map{|x| x.to_hash(include_wins)}}.to_json
   end
 end
 
@@ -99,19 +103,23 @@ get "/api/elections/?" do
   start = params[:start]
   start = start.to_i
   start = 1 if start < 1
+  count = 0
   
   case type
   when "ByElection"
-    elections = ByElection.all(:offset => start-1, :limit => 10).map{|election| {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}}.to_json
+    count = ByElection.count
+    elections = ByElection.all(:offset => start-1, :limit => 10).map{|election| {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}}
   when "GeneralElection"
-    elections = GeneralElection.all(:offset => start-1, :limit => 10).map{|election| {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}}.to_json
+    count = GeneralElection.count
+    elections = GeneralElection.all(:offset => start-1, :limit => 10).map{|election| {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}}
   else
-    elections = Election.all(:offset => start-1, :limit => 10).map{|election| {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}}.to_json
+    count = Election.count
+    elections = Election.all(:offset => start-1, :limit => 10).map{|election| {:id => election.id, :type => election._type, :start_date => election.start_date, :end_date => election.end_date}}
   end
   if elections == "null"
     "[]"
   else
-    elections
+    {"count" => count, :elections => elections}.to_json
   end
 end
 
@@ -149,6 +157,7 @@ get "/api/mps/search" do
   start = params[:start]
   start = start.to_i
   start = 0 if start < 2  
+  count = 0
   if params[:include_wins] == "true" or params[:include_wins] == "1"
     include_wins = true
   else
@@ -156,8 +165,10 @@ get "/api/mps/search" do
   end
   
   if year
+    count = Person.find_all_by_aka(/#{name}/i, "$or" => [{:died => nil},{:died => {"$gte" => "#{year}-01-01".to_time}}], :born.lte => "#{year}-01-01".to_time, :election_win_ids.ne => []).count
     members = Person.find_all_by_aka(/#{name}/i, "$or" => [{:died => nil},{:died => {"$gte" => "#{year}-01-01".to_time}}], :born.lte => "#{year}-01-01".to_time, :election_win_ids.ne => [], :limit => 10, :skip => start)
   else
+    count = Person.find_all_by_aka(/#{name}/i, :election_win_ids.ne => []).count
     members = Person.find_all_by_aka(/#{name}/i, :election_win_ids.ne => [], :limit => 10, :skip => start)
   end
   unless members.empty?
@@ -169,7 +180,7 @@ get "/api/mps/search" do
       end
       members_json << hash
     end
-    members_json.to_json
+    {"count" => count, :members => members_json}.to_json
   else
     status 404
     %Q|{"message": "Member not found", "type": "error"}|
@@ -186,6 +197,7 @@ get "/api/mps/?" do
     include_wins = false
   end
   
+  count = members = Person.where(:election_win_ids.ne => []).count
   members = Person.where(:election_win_ids.ne => []).limit(10).skip(start)
   members_hash = []
   members.each do |member|
@@ -195,7 +207,7 @@ get "/api/mps/?" do
     end
     members_hash << hash
   end
-  members_hash.to_json
+  {"count" => count, :members => members_hash}.to_json
 end
 
 get "/api/mps/:id/?" do
