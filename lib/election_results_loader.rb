@@ -7,11 +7,11 @@ require_relative '../models/person'
 
 class GeneralElectionResultsLoader
   def load_from_the_guardian()
-    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2010/results/json", "2010")    
+    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2010/results/json", "2010")
     # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2005/results/json", "2005")
     # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2001/results/json", "2001")
     # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1997/results/json", "1997")
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1992/results/json", "1992")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1992/results/json", "1992")
   end
 end
 
@@ -93,7 +93,7 @@ private
         person = [Person.find("Smith_J_1938")]
       elsif name == "Ian Stewart" and constituency_name == "Eccles"
         person = [Person.find("Stewart_I_1950")]
-      elsif name == "John Robertson" and constituency_name == "Glasgow North West"
+      elsif name == "John Robertson" and (constituency_name == "Glasgow North West" or constituency_name == "Glasgow Anniesland")
         person = [Person.find("Robertson_J_1952")]
       elsif name == "David Cairns" and constituency_name == "Inverclyde"
         person = [Person.find("Cairns_D_1966")] #would be caught by the year query
