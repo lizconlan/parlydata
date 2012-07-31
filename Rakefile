@@ -10,6 +10,7 @@ require_relative 'lib/by_election_loader'
 require_relative 'lib/general_election_loader'
 require_relative 'lib/election_results_loader'
 require_relative 'lib/parliament_loader'
+require_relative 'lib/session_loader'
 require_relative 'lib/person_loader'
 
 MONGO_URL = ENV['MONGOHQ_URL'] || YAML::load(File.read("config/mongo.yml"))[:mongohq_url]
@@ -25,6 +26,9 @@ task :load_all do
   # 
   prl = ParliamentLoader.new
   prl.load_from_file()
+  
+  ses = SessionLoader.new
+  ses.load_from_scraperwiki()
   #
   # ryl = RegnalYearLoader.new
   # ryl.load_from_scraperwiki()
