@@ -29,9 +29,9 @@ task :load_all do
   
   ses = SessionLoader.new
   ses.load_from_scraperwiki()
-  #
-  # ryl = RegnalYearLoader.new
-  # ryl.load_from_scraperwiki()
+  
+  ryl = RegnalYearLoader.new
+  ryl.load_from_scraperwiki()
   #
   # per = PersonLoader.new
   # per.load_from_scraperwiki()
