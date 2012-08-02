@@ -244,7 +244,25 @@ get "/api/date-search/?" do
     %Q|{"message": "Invalid date supplied"}|
   else
     qdate = (qdate + qdate.utc_offset).utc
-    stuff = TimelineElement.where(:start_date.lte => qdate, "$or" => [{:end_date => {"$gte" => qdate}}, {:end_date => nil}]).all
+    results = TimelineElement.where(:start_date.lte => qdate, "$or" => [{:end_date => {"$gte" => qdate}}, {:end_date => nil}]).all
+    
+    stuff = []
+    results.each do |widget|
+      case widget._type
+      when "RegnalYear"
+        stuff << {"type" => widget._type, "monarch" => widget.monarch, "year_of_reign" => widget.year_of_reign, "abbreviation" => widget.abbreviation}
+      when "Parliament"
+        stuff << {"type" => widget._type, "number" => widget.number}
+      when "ParliamentarySession"
+        stuff << {"type" => widget._type, "reference" => widget.reference}
+      when "GeneralElection"
+        stuff << {"type" => widget._type, "date" => widget.start_date, "id" => widget.id}
+      when "ByElection"
+        stuff << {"type" => widget._type, "date" => widget.start_date, "constituency" => widget.constituency.name, "reason" => widget.reason, "id" => widget.id }
+      else
+        stuff << widget
+      end
+    end
     
     stuff.to_json
   end
