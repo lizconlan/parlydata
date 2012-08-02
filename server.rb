@@ -231,6 +231,25 @@ get "/api/mps/:id/?" do
   end
 end
 
+get "/api/date-search/?" do
+  content_type :json
+  q = params[:q]
+  begin
+    qdate = Time.parse(q)
+  rescue
+    qdate = nil
+  end
+  unless qdate
+    status 400
+    %Q|{"message": "Invalid date supplied"}|
+  else
+    qdate = (qdate + qdate.utc_offset).utc
+    stuff = TimelineElement.where(:start_date.lte => qdate, "$or" => [{:end_date => {"$gte" => qdate}}, {:end_date => nil}]).all
+    
+    stuff.to_json
+  end
+end
+
 
 #Swagger things
 get "/api/constituencies.json" do
