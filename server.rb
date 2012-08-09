@@ -542,7 +542,7 @@ get "/api/date-search.json" do
             "responseTypeInternal":"com.parlydata.api.model.TimeElement",
             "errorResponses":[{"reason":"Invalid date supplied","code":400}],
             "nickname":"getDateSearch",
-            "responseClass":"List[]",
+            "responseClass":"List[TimeElement,Election]",
             "summary":"Date search"
           }
         ]
