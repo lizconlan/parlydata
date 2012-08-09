@@ -10,6 +10,7 @@ require_relative "models/constituency"
 require_relative "models/timeline_element"
 require_relative "models/person"
 require_relative "models/election_win"
+require_relative "models/role_appointment"
 
 before do
   if request.port != 80
@@ -221,6 +222,12 @@ get "/api/mps/:id/?" do
   member = Person.find(id)
   if member
     hash = {:id => "#{member.id}", :name => "#{member.forenames} #{member.surname}", :born => "#{member.born}", :died => "#{member.died}"}
+    if member.role_appointments
+      hash[:roles] = []
+      member.role_appointments.each do |role|
+        hash[:roles] << "#{role.title} #{role.appointed.strftime('%d %B %Y')} to #{role.left_role ? role.left_role.strftime('%d %B %Y') : "present"}"
+      end
+    end
     if include_wins
       hash[:election_wins] = member.election_wins.map {|x| {:type => x.election._type, :constituency_name => x.constituency.name, :party => x.party, :election_date => x.election.start_date}}
     end
@@ -706,6 +713,7 @@ get "/api/mps.json" do
           "name":{"type":"string"},
           "born":{"type":"string"},
           "died":{"type":"string"},
+          "roles":{"type":"array","items":{"type":"string"}},
           "election_wins":{"type":"array","items":{"$ref":"election", "type":{"type":"string"},"constituency":{"type":"string"},"party":{"type":"string"},"election_date":{"type":"string"}}}
         },
         "id":"mp"
