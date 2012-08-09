@@ -12,6 +12,7 @@ require_relative 'lib/election_results_loader'
 require_relative 'lib/parliament_loader'
 require_relative 'lib/session_loader'
 require_relative 'lib/person_loader'
+require_relative 'lib/role_appointments_loader'
 
 MONGO_URL = ENV['MONGOHQ_URL'] || YAML::load(File.read("config/mongo.yml"))[:mongohq_url]
 env = {}
@@ -24,14 +25,14 @@ task :load_all do
   # cl.load_from_scraperwiki()
   # cl.load_changes(2010)
   # 
-  prl = ParliamentLoader.new
-  prl.load_from_file()
-  
-  ses = SessionLoader.new
-  ses.load_from_scraperwiki()
-  
-  ryl = RegnalYearLoader.new
-  ryl.load_from_scraperwiki()
+  # prl = ParliamentLoader.new
+  # prl.load_from_file()
+  # 
+  # ses = SessionLoader.new
+  # ses.load_from_scraperwiki()
+  # 
+  # ryl = RegnalYearLoader.new
+  # ryl.load_from_scraperwiki()
   #
   # per = PersonLoader.new
   # per.load_from_scraperwiki()
@@ -42,6 +43,8 @@ task :load_all do
   # gel = GeneralElectionLoader.new
   # gel.load_from_file()
   # 
+  role = RoleAppointmentsLoader.new
+  role.load_from_scraperwiki()
   #
   # res = GeneralElectionResultsLoader.new
   # res.load_from_the_guardian()

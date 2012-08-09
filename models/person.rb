@@ -5,6 +5,7 @@ require 'mongo_mapper'
 class Person
   include MongoMapper::Document
   many :election_wins, :in => :election_win_ids
+  many :role_appointments, :in => :role_appointment_ids
   
   key :title, String
   key :forenames, String
@@ -15,6 +16,7 @@ class Person
   key :died, Date
   key :url, String
   key :election_win_ids, Array
+  key :role_appointment_ids, Array
   
   def add_aka(name)
     aka << name unless aka.include?(name)
