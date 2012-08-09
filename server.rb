@@ -231,9 +231,9 @@ get "/api/mps/:id/?" do
   end
 end
 
-get "/api/date-search/?" do
+get "/api/date-lookup/?" do
   content_type :json
-  q = params[:q]
+  q = params[:date]
   begin
     qdate = Time.parse(q)
   rescue
@@ -515,22 +515,22 @@ get "/api/elections.json" do
     }}|
 end
 
-get "/api/date-search.json" do
+get "/api/date-lookup.json" do
   #json file for Swagger
   %|{"apiVersion": "1.0",
     "swaggerVersion": "1.0",
     "basePath": "#{@base_path}",
-    "resourcePath": "/date-search",
+    "resourcePath": "/date-lookup",
     "apis": [
       {
-        "path":"/date-search",
-        "description":"Search for Time Elements by date",
+        "path":"/date-lookup",
+        "description":"Get a list of Time Elements for a given date",
         "operations":[
           {
             "parameters":[
               {
-                "name":"q",
-                "description":"Search query, requires a date",
+                "name":"date",
+                "description":"Date to do the lookup against",
                 "dataType":"date",
                 "required":true,
                 "allowMultiple":false,
@@ -541,9 +541,9 @@ get "/api/date-search.json" do
             "notes":"Returns a list of matching MPs or a 404 error if no matches are found",
             "responseTypeInternal":"com.parlydata.api.model.TimeElement",
             "errorResponses":[{"reason":"Invalid date supplied","code":400}],
-            "nickname":"getDateSearch",
+            "nickname":"getDateLookup",
             "responseClass":"List[TimeElement,Election]",
-            "summary":"Date search"
+            "summary":"Date lookup"
           }
         ]
       }
@@ -716,5 +716,5 @@ end
 
 get "/api/resources.json" do
   #resources.json for Swagger
-  %|{"apiVersion":"1","swaggerVersion":"1.0","basePath":"#{@base_path}","apis":[{"path":"/constituencies.{format}","description":"Operations about constituencies"}, {"path":"/elections.{format}","description":"Operations about elections"}, {"path":"/mps.{format}","description":"Operations about MPs"}, {"path":"/date-search.{format}","description":"Search for Time Elements by date"}]}|
+  %|{"apiVersion":"1","swaggerVersion":"1.0","basePath":"#{@base_path}","apis":[{"path":"/constituencies.{format}","description":"Operations about constituencies"}, {"path":"/elections.{format}","description":"Operations about elections"}, {"path":"/mps.{format}","description":"Operations about MPs"}, {"path":"/date-lookup.{format}","description":"Lookup on Time Elements by date"}]}|
 end
