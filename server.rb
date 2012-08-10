@@ -36,6 +36,8 @@ end
 
 get "/api/constituencies/search/?" do
   content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   name = params[:q]
   year = params[:year]
   count = 0
@@ -65,6 +67,8 @@ end
 
 get "/api/constituencies/?" do
   content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   start = params[:start]
   if params[:include_wins] == "true" or params[:include_wins] == "1"
     include_wins = true
@@ -83,6 +87,8 @@ end
 
 get "/api/constituencies/:id/?" do
   content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   id = params[:id]
   if params[:include_wins] == "true" or params[:include_wins] == "1"
     include_wins = true
@@ -100,6 +106,8 @@ end
 
 get "/api/elections/?" do
   content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   type = params[:type]
   start = params[:start]
   start = start.to_i
@@ -126,6 +134,8 @@ end
 
 get "/api/elections/:id/?" do
   content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   id = params[:id]
   if params[:include_wins] == "true" or params[:include_wins] == "1"
     include_wins = true
@@ -152,6 +162,8 @@ end
 
 get "/api/mps/search" do
   content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   name = params[:q]
   year = params[:year]
   year = nil if year.to_i < 1
@@ -189,6 +201,9 @@ get "/api/mps/search" do
 end
 
 get "/api/mps/?" do
+  content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   start = params[:start]
   start = start.to_i
   start = 0 if start < 2
@@ -213,6 +228,8 @@ end
 
 get "/api/mps/:id/?" do
   content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   id = params[:id]
   if params[:include_wins] == "true" or params[:include_wins] == "1"
     include_wins = true
@@ -240,6 +257,8 @@ end
 
 get "/api/date-lookup/?" do
   content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   q = params[:date]
   begin
     qdate = Time.parse(q)
@@ -278,6 +297,9 @@ end
 
 #Swagger things
 get "/api/constituencies.json" do
+  content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   #json file for Swagger
   %|{"apiVersion": "1.0",
     "swaggerVersion": "1.0",
@@ -427,6 +449,9 @@ get "/api/constituencies.json" do
 end
 
 get "/api/elections.json" do
+  content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   #json file for Swagger
   %|{"apiVersion": "1.0",
     "swaggerVersion": "1.0",
@@ -523,6 +548,9 @@ get "/api/elections.json" do
 end
 
 get "/api/date-lookup.json" do
+  content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   #json file for Swagger
   %|{"apiVersion": "1.0",
     "swaggerVersion": "1.0",
@@ -572,6 +600,9 @@ get "/api/date-lookup.json" do
 end
 
 get "/api/mps.json" do
+  content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   #json file for Swagger
   %|{"apiVersion": "1.0",
     "swaggerVersion": "1.0",
@@ -723,6 +754,9 @@ get "/api/mps.json" do
 end
 
 get "/api/resources.json" do
+  content_type :json
+  response['Cache-Control'] = "public, max-age=3600"
+  
   #resources.json for Swagger
   %|{"apiVersion":"1","swaggerVersion":"1.0","basePath":"#{@base_path}","apis":[{"path":"/constituencies.{format}","description":"Operations about constituencies"}, {"path":"/elections.{format}","description":"Operations about elections"}, {"path":"/mps.{format}","description":"Operations about MPs"}, {"path":"/date-lookup.{format}","description":"Lookup on Time Elements by date"}]}|
 end
