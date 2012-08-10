@@ -31,6 +31,7 @@ end
 
 get "/api" do
   #api documentation page
+  response['Cache-Control'] = "public, max-age=60"
   File.read('public/api/index.html')
 end
 
