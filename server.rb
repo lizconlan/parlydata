@@ -22,7 +22,8 @@ end
 
 get "/" do
   #welcome/intro/human-friendly explanatory page
-  "[insert explanation of service, available data sets, limitations, acknowledgements]"
+  response['Cache-Control'] = "public, max-age=43200"
+  File.read('public/index.html')
 end
 
 get "/api/" do

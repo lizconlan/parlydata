@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- Adapted from the example code provided by Swagger under the terms of the Apache 2.0 License -->
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <!-- Always force latest IE rendering engine (even in intranet) and Chrome Frame -->
+    <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible' />
+    <title>parlydata.com</title>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css' />
+    <link href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/smoothness/jquery-ui.css' media='screen' rel='stylesheet' type='text/css' />
+    <link href='stylesheets/swagger.css' media='screen' rel='stylesheet' type='text/css' />    
+    <style type="text/css">
+        #header {
+          display: block;
+          background-color: #BBBBBB;
+          border: 4px double #FFF;
+          margin-bottom: 8px;
+        }
+        #header h1 {
+          text-align:center;
+          padding: 1.25em 0;
+        }
+        #content {
+            max-width: 960px;
+            margin: 20px auto;
+        }
+        #content ul {
+          margin-left: 16px;
+        }
+        #content li {
+          padding: 0.2em 0;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <h1>parlydata.com</h1>
+    </div>
+    <div id="content">
+      <p>
+        Hello, you are currently viewing a pre-beta version of "parlydata" - an exploration of historical data about the UK Parliament. This is currently a very limited pilot with just a few datasets, mostly centred around the last 5 General Elections and isn't being updated to reflect current events (so if, in a few weeks, it still shows Louise Mensch as your local MP, please don't write in and complain). The idea is to present this information in the form of a RESTful API and see if it looks like something which could be genuinely useful if more data was poured into it.
+      </p>
+      
+      <p>Although the code is open source and public, I am not yet in a position to ask for help as the software constitutes the "practical" component of my Open University degree project so has to be my own work through the current phase and all my efforts are currently focussed on writing that up to get as good a mark as I can. After that, if it looks useful... Well, we'll see.</p>
+      
+      <h2 id="acknowledgements">Acknowledgements</h2>
+      <p>
+        The main data sources for this pilot were:
+        <ul>
+          <li><a href="http://www.parliament.uk">The UK Parliament</a> authoritative source of all things Parliament-related</li>
+          <li><a href="http://www.bbc.co.uk">The BBC</a> without whose archives, accurate election results would have proved impossible to recover</li>
+          <li><a href="http://www.guardian.co.uk">The Guardian</a>, mostly via their Open Data platform</li>
+          <li><a href="http://hansard.millbanksystems.com">Historic Hansard</a></li>
+          <li><a href="http://en.wikipedia.com">Wikipedia</a></li>
+        </ul>
+      </p>
+      <p>
+        My thanks for more indirect data assistance to "Who's Who", chiefly for settling disputes over matters of spelling and birth dates of noted parliamentarians, <a href="http://scraperwiki.com">ScraperWiki</a> for making the data mining as painless as possible, and <a href="http://www.leighrayment.com">the work of Leigh Rayment</a>.
+      </p>
+      <p>Software-wise I should also nod in the direction of <a href="http://swagger.wordnik.com">Swagger</a> for their API documentation platform, and point out that use of said software is under the terms of the Apache License, Version 2.0.</p>
+      
+      <h2 id="api">The API</h2>
+      <p>Well, if you've read down this far, I guess you want to play with the actual API? <a href="/api">Here it is</a>, but please be gentle with it - aside from a very basic Varnish cache and the hosting service's own limits, there's not really any rate-limiting or user-tracking going on. Yet.</p>
+    </div>
+  </body>
+</html>
