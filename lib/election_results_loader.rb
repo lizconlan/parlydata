@@ -7,10 +7,10 @@ require_relative '../models/person'
 
 class GeneralElectionResultsLoader
   def load_from_the_guardian()
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2010/results/json", "2010")
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2005/results/json", "2005")
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2001/results/json", "2001")
-    # fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1997/results/json", "1997")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2010/results/json", "2010")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2005/results/json", "2005")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/2001/results/json", "2001")
+    fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1997/results/json", "1997")
     fetch_guardian_data("http://www.guardian.co.uk/politics/api/general-election/1992/results/json", "1992")
   end
 end
