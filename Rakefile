@@ -56,6 +56,7 @@ end
 task :load_person_data do
   per = PersonLoader.new
   per.load_from_scraperwiki()
+  per.load_from_file()
 end
 
 task :load_by_elections do
