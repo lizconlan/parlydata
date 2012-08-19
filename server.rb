@@ -244,7 +244,7 @@ get "/api/mps/:id/?" do
     if member.role_appointments
       hash[:roles] = []
       member.role_appointments.each do |role|
-        hash[:roles] << "#{role.title} #{role.appointed.strftime('%d %B %Y')} to #{role.left_role ? role.left_role.strftime('%d %B %Y') : "present"}"
+        hash[:roles] << "#{role.title} #{role.appointed.strftime('%d %B %Y')} to #{role.left_role ? role.left_role.strftime('%d %B %Y') : "?"}"
       end
     end
     if include_wins
