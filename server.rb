@@ -11,6 +11,7 @@ require_relative "models/timeline_element"
 require_relative "models/person"
 require_relative "models/election_win"
 require_relative "models/role_appointment"
+require_relative "models/simple_logger"
 
 before do
   if request.port != 80
@@ -18,6 +19,7 @@ before do
   else
     @base_path = "http://#{request.host}/api"
   end
+  @logger = SimpleLogger.new()
 end
 
 get "/" do
@@ -79,6 +81,9 @@ get "/api/constituencies/?" do
   end
   start = start.to_i
   start = 1 if start < 1
+    
+  @logger.log(request)
+  
   count = Constituency.count
   if start > count
     "[]"
