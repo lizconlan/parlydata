@@ -22,7 +22,7 @@ class SimpleLogger
     timestamp = Time.now
     log_entry.timestamp = timestamp
     
-    log_entry.id = "#{timestamp.strftime("%Y%m%d-%H%M")}_#{log_entry.ip}"
+    log_entry.id = "#{timestamp.strftime("%Y%m%d-%H%M%S")}_#{log_entry.ip}"
     
     log_entry.save
   end
