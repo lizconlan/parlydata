@@ -19,7 +19,11 @@ class SimpleLogger
     else
       log_entry.ip = req.env["REMOTE_ADDR"]
     end
-    log_entry.timestamp = Time.now
+    timestamp = Time.now
+    log_entry.timestamp = timestamp
+    
+    log_entry.id = "#{timestamp.strftime("%Y%m%d-%H%M")}_#{log_entry.ip}"
+    
     log_entry.save
   end
 end
