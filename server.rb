@@ -19,7 +19,11 @@ before do
   else
     @base_path = "http://#{request.host}/api"
   end
-  @logger = SimpleLogger.new()
+  begin
+    @logger = SimpleLogger.new()
+  rescue
+    #unable to create logger object - annoying but not essential, fail silently
+  end
 end
 
 get "/" do
@@ -39,7 +43,11 @@ get "/api" do
 end
 
 get "/api/constituencies/search/?" do
-  @logger.log(request)
+  begin
+    @logger.log(request)
+  rescue
+    #unable to access log
+  end
   content_type :json
   response['Cache-Control'] = "public, max-age=3600"
   
@@ -71,7 +79,11 @@ get "/api/constituencies/search/?" do
 end
 
 get "/api/constituencies/?" do
-  @logger.log(request)
+  begin
+    @logger.log(request)
+  rescue
+    #unable to access log
+  end
   content_type :json
   response['Cache-Control'] = "public, max-age=3600"
   
@@ -93,7 +105,11 @@ get "/api/constituencies/?" do
 end
 
 get "/api/constituencies/:id/?" do
-  @logger.log(request)
+  begin
+    @logger.log(request)
+  rescue
+    #unable to access log
+  end
   content_type :json
   response['Cache-Control'] = "public, max-age=3600"
   
@@ -113,7 +129,11 @@ get "/api/constituencies/:id/?" do
 end
 
 get "/api/elections/?" do
-  @logger.log(request)
+  begin
+    @logger.log(request)
+  rescue
+    #unable to access log
+  end
   content_type :json
   response['Cache-Control'] = "public, max-age=3600"
   
@@ -142,7 +162,11 @@ get "/api/elections/?" do
 end
 
 get "/api/elections/:id/?" do
-  @logger.log(request)
+  begin
+    @logger.log(request)
+  rescue
+    #unable to access log
+  end
   content_type :json
   response['Cache-Control'] = "public, max-age=3600"
   
@@ -171,7 +195,11 @@ get "/api/elections/:id/?" do
 end
 
 get "/api/mps/search" do
-  @logger.log(request)
+  begin
+    @logger.log(request)
+  rescue
+    #unable to access log
+  end
   content_type :json
   response['Cache-Control'] = "public, max-age=3600"
   
@@ -212,7 +240,11 @@ get "/api/mps/search" do
 end
 
 get "/api/mps/?" do
-  @logger.log(request)
+  begin
+    @logger.log(request)
+  rescue
+    #unable to access log
+  end
   content_type :json
   response['Cache-Control'] = "public, max-age=3600"
   
@@ -239,7 +271,11 @@ get "/api/mps/?" do
 end
 
 get "/api/mps/:id/?" do
-  @logger.log(request)
+  begin
+    @logger.log(request)
+  rescue
+    #unable to access log
+  end
   content_type :json
   response['Cache-Control'] = "public, max-age=3600"
   
@@ -269,7 +305,11 @@ get "/api/mps/:id/?" do
 end
 
 get "/api/date-lookup/?" do
-  @logger.log(request)
+  begin
+    @logger.log(request)
+  rescue
+    #unable to access log
+  end
   content_type :json
   response['Cache-Control'] = "public, max-age=3600"
   
