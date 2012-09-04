@@ -55,6 +55,7 @@ get "/api/constituencies/search/?" do
   response['Cache-Control'] = "public, max-age=3600"
   
   name = params[:q]
+  name.gsub!(/^\*/, "")
   year = params[:year]
   count = 0
   if params[:include_wins] == "true" or params[:include_wins] == "1"
@@ -197,7 +198,7 @@ get "/api/elections/:id/?" do
   end
 end
 
-get "/api/mps/search" do
+get "/api/mps/search/?" do
   begin
     @logger.log(request)
   rescue
@@ -207,6 +208,7 @@ get "/api/mps/search" do
   response['Cache-Control'] = "public, max-age=3600"
   
   name = params[:q]
+  name.gsub!(/^\*/, "")
   year = params[:year]
   year = nil if year.to_i < 1
   start = params[:start]

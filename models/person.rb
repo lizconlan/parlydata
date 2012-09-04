@@ -23,6 +23,7 @@ class Person
   end
   
   def self.find_best_matches(name, year=nil)
+    name.gsub!(/^\*/, "")
     parts = name.split
     surname = parts.pop
     forenames = parts.join(" ")
