@@ -55,7 +55,7 @@ get "/api/constituencies/search/?" do
   response['Cache-Control'] = "public, max-age=3600"
   
   name = params[:q]
-  name.gsub!(/^\*/, "")
+  name.gsub!(/^\*|\?/, "") if name
   year = params[:year]
   count = 0
   if params[:include_wins] == "true" or params[:include_wins] == "1"
@@ -74,7 +74,7 @@ get "/api/constituencies/search/?" do
     constituencies = Constituency.find_all_by_name(/#{name}/i, :offset => start-1, :limit => 10)
     count = Constituency.find_all_by_name(/#{name}/i).count
   end
-  unless constituencies.empty?
+  unless constituencies.nil? or constituencies.empty?
     {"count" => count, :constituencies => constituencies.map{|x| x.to_hash(include_wins)}}.to_json
   else
     status 404
@@ -208,7 +208,7 @@ get "/api/mps/search/?" do
   response['Cache-Control'] = "public, max-age=3600"
   
   name = params[:q]
-  name.gsub!(/^\*/, "")
+  name.gsub!(/^\*|\?/, "") if name
   year = params[:year]
   year = nil if year.to_i < 1
   start = params[:start]
@@ -224,11 +224,11 @@ get "/api/mps/search/?" do
   if year
     count = Person.find_all_by_aka(/#{name}/i, "$or" => [{:died => nil},{:died => {"$gte" => "#{year}-01-01".to_time}}], :born.lte => "#{year}-01-01".to_time, :election_win_ids.ne => []).count
     members = Person.find_all_by_aka(/#{name}/i, "$or" => [{:died => nil},{:died => {"$gte" => "#{year}-01-01".to_time}}], :born.lte => "#{year}-01-01".to_time, :election_win_ids.ne => [], :limit => 10, :skip => start)
-  else
+  elsif name
     count = Person.find_all_by_aka(/#{name}/i, :election_win_ids.ne => []).count
     members = Person.find_all_by_aka(/#{name}/i, :election_win_ids.ne => [], :limit => 10, :skip => start)
   end
-  unless members.empty?
+  unless members.nil? or members.empty?
     members_json = []
     members.each do |member|
       hash = {:id => "#{member.id}", :name => "#{member.forenames} #{member.surname}", :born => "#{member.born}", :died => "#{member.died}"}
