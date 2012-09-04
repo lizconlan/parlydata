@@ -55,7 +55,10 @@ get "/api/constituencies/search/?" do
   response['Cache-Control'] = "public, max-age=3600"
   
   name = params[:q]
+  name = nil if name and name.strip == ""
   name.gsub!(/^\*|\?/, "") if name
+  name.gsub!(/\\$/, "") if name
+  name = nil if name and name.strip == ""
   year = params[:year]
   count = 0
   if params[:include_wins] == "true" or params[:include_wins] == "1"
@@ -208,7 +211,10 @@ get "/api/mps/search/?" do
   response['Cache-Control'] = "public, max-age=3600"
   
   name = params[:q]
+  name = nil if name and name.strip == ""
   name.gsub!(/^\*|\?/, "") if name
+  name.gsub!(/\\$/, "") if name
+  name = nil if name and name.strip == ""
   year = params[:year]
   year = nil if year.to_i < 1
   start = params[:start]
