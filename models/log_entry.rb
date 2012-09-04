@@ -2,7 +2,7 @@ require 'mongo_mapper'
 
 class LogEntry
   include MongoMapper::Document
-  log_url = ENV['LOG_URL'] || YAML::load(File.read("config/mongo.yml"))[:mongolog_url]
+  log_url = ENV['LOG_URL'] || YAML::load(File.read("config/mongo.yml"))[:mongolog_url]  || ""
   
   key :ip, String
   key :url, String
